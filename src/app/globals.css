@@ -1,0 +1,146 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================================================
+   Design tokens — light & dark (Apple-inspired palette)
+   HSL channels, consumed by tailwind.config.ts
+   ========================================================= */
+:root {
+  --background: 0 0% 100%;
+  --foreground: 240 10% 8%;
+  --card: 0 0% 100%;
+  --muted: 240 5% 96%;
+  --muted-foreground: 240 4% 46%;
+  --border: 240 6% 90%;
+  --accent: 211 100% 50%; /* Apple blue */
+  --accent-foreground: 0 0% 100%;
+
+  --glass-bg: 255 255 255;
+  --glass-opacity: 0.6;
+  --font-sans: "SF Pro Display", "Inter";
+}
+
+.dark {
+  --background: 240 10% 4%;
+  --foreground: 0 0% 98%;
+  --card: 240 8% 8%;
+  --muted: 240 6% 14%;
+  --muted-foreground: 240 5% 65%;
+  --border: 240 6% 18%;
+  --accent: 211 100% 55%;
+  --accent-foreground: 0 0% 100%;
+
+  --glass-bg: 20 20 25;
+  --glass-opacity: 0.5;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Ambient gradient background blobs */
+.bg-aurora::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(40rem 40rem at 15% 10%, hsl(var(--accent) / 0.12), transparent 60%),
+    radial-gradient(35rem 35rem at 85% 20%, hsl(280 80% 60% / 0.10), transparent 60%),
+    radial-gradient(40rem 40rem at 50% 100%, hsl(190 90% 55% / 0.08), transparent 60%);
+  pointer-events: none;
+}
+
+/* =========================================================
+   Glassmorphism utilities
+   ========================================================= */
+@layer components {
+  .glass {
+    background-color: rgb(var(--glass-bg) / var(--glass-opacity));
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid hsl(var(--border) / 0.6);
+  }
+
+  .glass-strong {
+    background-color: rgb(var(--glass-bg) / 0.85);
+    backdrop-filter: blur(28px) saturate(200%);
+    -webkit-backdrop-filter: blur(28px) saturate(200%);
+    border: 1px solid hsl(var(--border) / 0.7);
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn bg-accent text-accent-foreground shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 hover:-translate-y-0.5;
+  }
+  .btn-secondary {
+    @apply btn glass text-foreground hover:-translate-y-0.5;
+  }
+  .btn-ghost {
+    @apply btn text-muted-foreground hover:text-foreground hover:bg-muted;
+  }
+
+  .card {
+    @apply rounded-3xl border border-border bg-card/70 backdrop-blur-sm transition-all duration-300;
+  }
+
+  .section {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+
+  .heading-gradient {
+    @apply bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent;
+  }
+}
+
+/* Progress bar shimmer */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  animation: shimmer 2s infinite;
+}
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
