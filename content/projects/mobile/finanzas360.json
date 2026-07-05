@@ -1,0 +1,16 @@
+{
+  "slug": "finanzas360",
+  "type": "mobile",
+  "name": "Finanzas360",
+  "tagline": "Gestión financiera personal",
+  "description": "Finanzas 360 te ayuda a organizar y dar seguimiento a tus finanzas personales.",
+  "tags": ["Flutter", "Android"],
+  "category": "Finanzas personales",
+  "status": "development",
+  "featured": false,
+  "logo": "/me.svg",
+  "screenshots": [],
+  "repo": "AngelDevRD/finanzas360",
+  "packageId": "com.example.finanzas360",
+  "docsUrl": "https://github.com/AngelDevRD/finanzas360#readme"
+}

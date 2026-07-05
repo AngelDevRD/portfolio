@@ -1,12 +1,17 @@
 import type { Metadata } from "next";
 import { AppExplorer } from "@/components/apps/app-explorer";
+import { getMobileProjects } from "@/data";
+
+export const revalidate = 1800;
 
 export const metadata: Metadata = {
   title: "App Store",
-  description: "Explora todas las aplicaciones: web, Android, Windows, herramientas, IA y juegos.",
+  description: "Explora todas mis aplicaciones móviles.",
 };
 
-export default function AppsPage() {
+export default async function AppsPage() {
+  const apps = await getMobileProjects();
+
   return (
     <div className="section pt-32 pb-16">
       <div className="mb-10 text-center">
@@ -21,7 +26,7 @@ export default function AppsPage() {
         </p>
       </div>
 
-      <AppExplorer />
+      <AppExplorer apps={apps} />
     </div>
   );
 }

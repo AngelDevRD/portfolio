@@ -1,18 +1,24 @@
-import projectsJson from "./projects.json";
-import appsJson from "./apps.json";
-import type { AppItem, Project } from "@/lib/types";
+import { getProjectRepository } from "@/lib/projects/factory";
+import type { ProjectFilter } from "@/lib/projects/filter";
+import type { MobileProject, WebProject } from "@/lib/projects/schema";
+import type { EnrichedProject } from "@/lib/github/types";
 
-export const projects = projectsJson as Project[];
-export const apps = appsJson as AppItem[];
+const repo = getProjectRepository();
 
-export function getProjectBySlug(slug: string): Project | undefined {
-  return projects.find((p) => p.slug === slug);
+export function getAllProjects(filter?: ProjectFilter) {
+  return repo.getAll(filter);
 }
 
-export function getAppBySlug(slug: string): AppItem | undefined {
-  return apps.find((a) => a.slug === slug);
+export async function getMobileProjects(filter?: ProjectFilter) {
+  const items = await repo.getByType("mobile", filter);
+  return items as EnrichedProject<MobileProject>[];
 }
 
-/** Categorías/tecnologías únicas para poblar los filtros dinámicamente. */
-export const projectCategories = Array.from(new Set(projects.map((p) => p.category)));
-export const appPlatforms = Array.from(new Set(apps.map((a) => a.platform)));
+export async function getWebProjects(filter?: ProjectFilter) {
+  const items = await repo.getByType("web", filter);
+  return items as EnrichedProject<WebProject>[];
+}
+
+export function getProjectBySlug(slug: string) {
+  return repo.getBySlug(slug);
+}

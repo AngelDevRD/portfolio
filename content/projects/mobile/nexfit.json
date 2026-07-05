@@ -1,0 +1,16 @@
+{
+  "slug": "nexfit",
+  "type": "mobile",
+  "name": "NexFit",
+  "tagline": "Entrenador personal inteligente para gimnasio",
+  "description": "NexFit es un entrenador personal inteligente para gimnasio, con seguimiento de rutinas, entrenamientos y metas.",
+  "tags": ["Flutter", "Android"],
+  "category": "Fitness",
+  "status": "development",
+  "featured": false,
+  "logo": "/me.svg",
+  "screenshots": [],
+  "repo": "AngelDevRD/nexfit",
+  "packageId": "com.example.appgym",
+  "docsUrl": "https://github.com/AngelDevRD/nexfit#readme"
+}

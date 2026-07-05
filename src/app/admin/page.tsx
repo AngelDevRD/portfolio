@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
-  FolderKanban, AppWindow, Download, Lightbulb, Mail, FileJson, ExternalLink,
+  FolderKanban, AppWindow, Github, Lightbulb, Mail, FileJson, ExternalLink,
 } from "lucide-react";
-import { apps, projects } from "@/data";
+import { getMobileProjects, getWebProjects } from "@/data";
 import { getSupabaseAdmin } from "@/lib/supabase";
 import { LogoutButton } from "@/components/admin/logout-button";
-import { formatCount, formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Admin", robots: { index: false, follow: false } };
 export const dynamic = "force-dynamic";
@@ -38,13 +38,16 @@ async function getSuggestions(): Promise<{ rows: SuggestionRow[]; configured: bo
 }
 
 export default async function AdminPage() {
-  const totalDownloads = apps.reduce((s, a) => s + a.downloads, 0);
-  const { rows: suggestions, configured } = await getSuggestions();
+  const [mobile, web, { rows: suggestions, configured }] = await Promise.all([
+    getMobileProjects(),
+    getWebProjects(),
+    getSuggestions(),
+  ]);
 
   const stats = [
-    { label: "Proyectos", value: projects.length, icon: FolderKanban },
-    { label: "Aplicaciones", value: apps.length, icon: AppWindow },
-    { label: "Descargas totales", value: formatCount(totalDownloads), icon: Download },
+    { label: "Apps móviles", value: mobile.length, icon: AppWindow },
+    { label: "Proyectos web", value: web.length, icon: FolderKanban },
+    { label: "Total repos", value: mobile.length + web.length, icon: Github },
     { label: "Sugerencias", value: suggestions.length, icon: Lightbulb },
   ];
 
@@ -116,15 +119,16 @@ export default async function AdminPage() {
               <FileJson className="h-5 w-5 text-accent" /> Gestión de contenido
             </h2>
             <p className="mb-4 text-sm text-muted-foreground">
-              Proyectos y apps se administran por archivos JSON (versionados en git). Para añadir, editar o eliminar,
-              edita:
+              Cada proyecto es un archivo JSON (versionado en git). Para añadir uno nuevo, copia un archivo existente
+              como plantilla, cambia sus campos y haz commit + push:
             </p>
             <ul className="space-y-2 text-sm">
-              <li className="rounded-lg bg-muted/60 px-3 py-2 font-mono text-xs">src/data/projects.json</li>
-              <li className="rounded-lg bg-muted/60 px-3 py-2 font-mono text-xs">src/data/apps.json</li>
+              <li className="rounded-lg bg-muted/60 px-3 py-2 font-mono text-xs">content/projects/mobile/*.json</li>
+              <li className="rounded-lg bg-muted/60 px-3 py-2 font-mono text-xs">content/projects/web/*.json</li>
             </ul>
             <p className="mt-3 text-xs text-muted-foreground">
-              Las imágenes/iconos van en <code>/public</code>. Tras editar, haz commit y push: Vercel redespliega solo.
+              Versión, tamaño, fecha e historial de las apps móviles se leen en vivo desde GitHub Releases — no se
+              editan a mano. Las imágenes van en <code>/public</code>. Tras editar, Vercel redespliega solo.
             </p>
           </div>
 

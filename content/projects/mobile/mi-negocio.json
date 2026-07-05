@@ -1,0 +1,16 @@
+{
+  "slug": "mi-negocio",
+  "type": "mobile",
+  "name": "Mi Negocio",
+  "tagline": "Gestión offline-first para pequeños negocios",
+  "description": "Gestión de embutidoras, colmados y pequeños negocios alimenticios, pensada para funcionar sin conexión.",
+  "tags": ["Flutter", "Android", "Offline-first"],
+  "category": "Negocios",
+  "status": "development",
+  "featured": false,
+  "logo": "/me.svg",
+  "screenshots": [],
+  "repo": "AngelDevRD/mi-negocio",
+  "packageId": "com.example.app_gestion",
+  "docsUrl": "https://github.com/AngelDevRD/mi-negocio#readme"
+}

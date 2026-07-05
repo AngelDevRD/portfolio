@@ -1,8 +1,8 @@
 import type { MetadataRoute } from "next";
-import { apps } from "@/data";
+import { getMobileProjects } from "@/data";
 import { site } from "@/lib/site";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = site.url.replace(/\/$/, "");
   const now = new Date();
 
@@ -11,9 +11,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/apps`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
   ];
 
+  const apps = await getMobileProjects();
   const appRoutes: MetadataRoute.Sitemap = apps.map((a) => ({
     url: `${base}/apps/${a.slug}`,
-    lastModified: new Date(a.updatedAt),
+    lastModified: new Date(a.github?.releaseDate ?? a.github?.lastCommitAt ?? now),
     changeFrequency: "monthly",
     priority: 0.7,
   }));

@@ -3,10 +3,14 @@ import { ArrowRight } from "lucide-react";
 import { SectionHeader } from "@/components/ui/section-header";
 import { Reveal } from "@/components/ui/reveal";
 import { AppCard } from "@/components/apps/app-card";
-import { apps } from "@/data";
+import { getMobileProjects } from "@/data";
 
-export function AppStorePreview() {
-  const featured = [...apps].sort((a, b) => b.downloads - a.downloads).slice(0, 3);
+export async function AppStorePreview() {
+  const apps = await getMobileProjects();
+  const curated = apps.filter((a) => a.featured);
+  const featured = (curated.length > 0 ? curated : apps)
+    .sort((a, b) => (b.github?.starsCount ?? 0) - (a.github?.starsCount ?? 0))
+    .slice(0, 3);
 
   return (
     <section id="appstore" className="scroll-mt-24 bg-muted/30 py-24">
