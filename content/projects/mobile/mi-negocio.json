@@ -1,7 +1,7 @@
 {
   "slug": "mi-negocio",
   "type": "mobile",
-  "name": "Mi Negocio",
+  "name": "MiTienda 360",
   "tagline": "Gestión offline-first para pequeños negocios",
   "description": "Gestión de embutidoras, colmados y pequeños negocios alimenticios, pensada para funcionar sin conexión.",
   "tags": ["Flutter", "Android", "Offline-first"],
