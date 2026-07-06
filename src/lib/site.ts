@@ -11,8 +11,7 @@ export const site = {
     "Portafolio y tienda de aplicaciones de Angel Daniel Genao Santamaria — desarrollador junior de software. Proyectos CRUD, ETL, visualización de datos y sistemas fullstack.",
   email: "angeldnielgs@gmail.com",
   location: "Monte Plata, RD",
-  // Reemplaza esta foto por la tuya en /public/me.svg (o pon me.jpg y cambia esta ruta)
-  avatar: "/me.svg",
+  avatar: "/me.png",
   cv: "/cv.pdf",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   socials: {
