@@ -16,6 +16,12 @@ interface GhRelease {
   assets: { name: string; size: number; browser_download_url: string; url: string }[];
 }
 
+/** Quita la línea "**Full Changelog**: ..." que GitHub agrega automáticamente cuando un release no tiene notas propias. */
+function cleanReleaseNotes(body: string | null): string {
+  if (!body) return "";
+  return body.replace(/\*\*Full Changelog\*\*:\s*\S+/gi, "").trim();
+}
+
 function authHeaders(): HeadersInit {
   const token = process.env.GITHUB_TOKEN;
   return {
@@ -71,7 +77,7 @@ export async function getGithubEnrichment(
 
     enrichment.latestVersion = latest.tag_name;
     enrichment.releaseDate = latest.published_at;
-    enrichment.releaseNotes = latest.body ?? undefined;
+    enrichment.releaseNotes = cleanReleaseNotes(latest.body) || undefined;
     enrichment.apkSizeBytes = latestApk?.size;
     enrichment.downloadUrl = latestApk?.browser_download_url;
     enrichment.downloadAssetUrl = latestApk?.url;
@@ -80,7 +86,7 @@ export async function getGithubEnrichment(
       return {
         version: r.tag_name,
         date: r.published_at,
-        notes: r.body ?? "",
+        notes: cleanReleaseNotes(r.body),
         downloadUrl: apk?.browser_download_url ?? "",
         sizeBytes: apk?.size ?? 0,
       };
