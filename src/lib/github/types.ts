@@ -24,4 +24,4 @@ export interface GithubEnrichment {
   releaseHistory?: ReleaseHistoryEntry[];
 }
 
-export type EnrichedProject<T> = T & { github: GithubEnrichment | null };
+export type EnrichedProject<T> = T & { github: GithubEnrichment | null; downloads: number };

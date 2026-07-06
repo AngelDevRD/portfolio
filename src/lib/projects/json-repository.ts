@@ -4,6 +4,7 @@ import { catalogProjectSchema, type CatalogProject } from "./schema";
 import { applyFilter, type ProjectFilter } from "./filter";
 import type { ProjectRepository } from "./repository";
 import { getGithubEnrichment } from "@/lib/github/enrichment";
+import { getDownloadCount } from "@/lib/downloads/counter";
 import type { EnrichedProject } from "@/lib/github/types";
 
 const CONTENT_ROOT = path.join(process.cwd(), "content", "projects");
@@ -35,7 +36,13 @@ function loadAll(): CatalogProject[] {
 
 async function enrich<T extends CatalogProject>(items: T[]): Promise<EnrichedProject<T>[]> {
   return Promise.all(
-    items.map(async (p) => ({ ...p, github: await getGithubEnrichment(p.repo, p.type) }))
+    items.map(async (p) => {
+      const [github, downloads] = await Promise.all([
+        getGithubEnrichment(p.repo, p.type),
+        getDownloadCount(p.slug),
+      ]);
+      return { ...p, github, downloads };
+    })
   );
 }
 

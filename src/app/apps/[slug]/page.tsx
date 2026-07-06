@@ -7,7 +7,7 @@ import { getMobileProjects, getProjectBySlug } from "@/data";
 import { TechPill } from "@/components/ui/tech-pill";
 import { Gallery } from "@/components/apps/gallery";
 import { ShareButton, ReportButton } from "@/components/apps/app-actions";
-import { formatBytes, formatDate } from "@/lib/utils";
+import { formatBytes, formatCount, formatDate } from "@/lib/utils";
 
 export const revalidate = 1800;
 
@@ -56,6 +56,9 @@ export default async function AppDetailPage({
         <div className="flex-1">
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{app.name}</h1>
           <p className="mt-1 text-lg text-muted-foreground">{app.tagline}</p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            <span className="font-semibold text-foreground">{formatCount(app.downloads)}</span> descargas
+          </p>
           <div className="mt-3 flex flex-wrap items-center gap-2">
             {app.tags.map((t) => (
               <span key={t} className="rounded-full bg-muted px-2.5 py-0.5 text-xs">{t}</span>
@@ -147,6 +150,7 @@ export default async function AppDetailPage({
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Información</h3>
             <dl className="space-y-3 text-sm">
               <Row label="Versión" value={app.github?.latestVersion ?? "—"} />
+              <Row label="Descargas" value={formatCount(app.downloads)} />
               <Row label="Tamaño" value={app.github?.apkSizeBytes ? formatBytes(app.github.apkSizeBytes) : "—"} />
               <Row label="Categoría" value={app.category ?? "—"} />
               <Row

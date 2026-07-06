@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { Download, Info } from "lucide-react";
 import type { MobileProject } from "@/lib/projects/schema";
 import type { EnrichedProject } from "@/lib/github/types";
-import { formatBytes, formatDate } from "@/lib/utils";
+import { formatBytes, formatCount, formatDate } from "@/lib/utils";
 
 export function AppCard({ app }: { app: EnrichedProject<MobileProject> }) {
   const downloadUrl = `/api/projects/${app.slug}/download`;
@@ -36,10 +36,14 @@ export function AppCard({ app }: { app: EnrichedProject<MobileProject> }) {
 
       <p className="mt-4 line-clamp-2 flex-1 text-sm text-muted-foreground">{app.description}</p>
 
-      <dl className="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
+      <dl className="mt-4 grid grid-cols-2 gap-2 text-center text-xs">
         <div className="rounded-xl bg-muted/60 py-2">
           <dt className="text-muted-foreground">Versión</dt>
           <dd className="font-semibold">{app.github?.latestVersion ?? "—"}</dd>
+        </div>
+        <div className="rounded-xl bg-muted/60 py-2">
+          <dt className="text-muted-foreground">Descargas</dt>
+          <dd className="font-semibold">{formatCount(app.downloads)}</dd>
         </div>
         <div className="rounded-xl bg-muted/60 py-2">
           <dt className="text-muted-foreground">Tamaño</dt>

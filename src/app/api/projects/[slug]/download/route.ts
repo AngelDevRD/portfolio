@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getProjectRepository } from "@/lib/projects/factory";
+import { incrementDownloadCount } from "@/lib/downloads/counter";
 
 export const dynamic = "force-dynamic";
 
@@ -36,10 +37,12 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
 
   const location = assetRes.headers.get("location");
   if (assetRes.status >= 300 && assetRes.status < 400 && location) {
+    await incrementDownloadCount(project.slug);
     return NextResponse.redirect(location, { status: 302 });
   }
 
   if (assetRes.ok && assetRes.body) {
+    await incrementDownloadCount(project.slug);
     return new NextResponse(assetRes.body, {
       headers: {
         "Content-Type": "application/vnd.android.package-archive",

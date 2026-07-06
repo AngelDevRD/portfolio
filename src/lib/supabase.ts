@@ -28,3 +28,18 @@ export function getSupabaseAdmin(): SupabaseClient | null {
     auth: { persistSession: false },
   });
 }
+
+/**
+ * Cliente de Supabase con la clave anon/publishable (segura para exponer).
+ * Usado para operaciones de solo-lectura o vía funciones RPC de acceso
+ * acotado (ej. increment_portfolio_download), nunca para acceso directo
+ * de escritura a tablas con RLS restrictiva.
+ */
+export function getSupabasePublic(): SupabaseClient | null {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) return null;
+  return createClient(url, key, {
+    auth: { persistSession: false },
+  });
+}
