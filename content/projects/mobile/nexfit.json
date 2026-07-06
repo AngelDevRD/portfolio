@@ -8,7 +8,7 @@
   "category": "Fitness",
   "status": "development",
   "featured": false,
-  "logo": "/me.svg",
+  "logo": "/apps/nexfit/icon.png",
   "screenshots": [],
   "repo": "AngelDevRD/nexfit",
   "packageId": "com.angeldevrd.nexfit",

@@ -8,7 +8,7 @@
   "category": "Finanzas personales",
   "status": "development",
   "featured": false,
-  "logo": "/me.svg",
+  "logo": "/apps/finanzas360/icon.png",
   "screenshots": [],
   "repo": "AngelDevRD/finanzas360",
   "packageId": "com.angeldevrd.finanzas360",

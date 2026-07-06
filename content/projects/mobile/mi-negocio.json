@@ -8,7 +8,7 @@
   "category": "Negocios",
   "status": "development",
   "featured": false,
-  "logo": "/me.svg",
+  "logo": "/apps/mi-negocio/icon.png",
   "screenshots": [],
   "repo": "AngelDevRD/mi-negocio",
   "packageId": "com.angeldevrd.appgestion",
