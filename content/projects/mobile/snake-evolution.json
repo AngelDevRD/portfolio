@@ -1,0 +1,16 @@
+{
+  "slug": "snake-evolution",
+  "type": "mobile",
+  "name": "Snake Evolution",
+  "tagline": "El clásico snake, modernizado",
+  "description": "Snake Evolution es una versión modernizada del clásico juego de la serpiente, con Material 3 y persistencia local.",
+  "tags": ["Flutter", "Android", "Juego"],
+  "category": "Arcade",
+  "status": "development",
+  "featured": false,
+  "logo": "/apps/snake-evolution/icon.png",
+  "screenshots": [],
+  "repo": "AngelDevRD/snake_evolution",
+  "packageId": "com.portfolio.snakeevolution.snake_evolution",
+  "docsUrl": "https://github.com/AngelDevRD/snake_evolution#readme"
+}

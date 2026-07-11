@@ -1,0 +1,16 @@
+{
+  "slug": "memory-cards",
+  "type": "mobile",
+  "name": "Memory Cards",
+  "tagline": "Juego de memoria (parejas)",
+  "description": "Memory Cards es un juego de memoria clásico: encuentra las parejas de cartas en el menor tiempo posible.",
+  "tags": ["Flutter", "Android", "Juego"],
+  "category": "Puzzle",
+  "status": "development",
+  "featured": false,
+  "logo": "/apps/memory-cards/icon.png",
+  "screenshots": [],
+  "repo": "AngelDevRD/memory_cards",
+  "packageId": "com.portfolio.memorycards.memory_cards",
+  "docsUrl": "https://github.com/AngelDevRD/memory_cards#readme"
+}

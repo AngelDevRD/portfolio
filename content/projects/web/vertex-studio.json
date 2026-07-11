@@ -1,0 +1,16 @@
+{
+  "slug": "vertex-studio",
+  "type": "web",
+  "name": "Vertex Studio",
+  "tagline": "Agencia digital — desarrollo y diseño",
+  "description": "Landing de agencia digital: servicios de desarrollo web, diseño y branding para negocios.",
+  "tags": ["Next.js", "Landing"],
+  "category": "Agencia digital",
+  "status": "development",
+  "featured": false,
+  "logo": "/apps/vertex-studio/icon.png",
+  "screenshots": [],
+  "repo": "AngelDevRD/vertex-studio",
+  "demoUrl": "https://vertex-studio-pied.vercel.app",
+  "docsUrl": "https://github.com/AngelDevRD/vertex-studio#readme"
+}

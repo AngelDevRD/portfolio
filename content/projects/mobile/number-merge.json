@@ -1,0 +1,16 @@
+{
+  "slug": "number-merge",
+  "type": "mobile",
+  "name": "Number Merge",
+  "tagline": "Juego de puzzle numérico estilo 2048",
+  "description": "Number Merge es un juego de puzzle numérico inspirado en 2048: combina fichas para llegar a números cada vez más altos.",
+  "tags": ["Flutter", "Android", "Juego"],
+  "category": "Puzzle",
+  "status": "development",
+  "featured": false,
+  "logo": "/apps/number-merge/icon.png",
+  "screenshots": [],
+  "repo": "AngelDevRD/number_merge",
+  "packageId": "com.portfolio.numbermerge.number_merge",
+  "docsUrl": "https://github.com/AngelDevRD/number_merge#readme"
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "nova-dental",
+  "type": "web",
+  "name": "Nova Dental",
+  "tagline": "Clínica dental moderna",
+  "description": "Landing de clínica dental: ortodoncia, implantes, limpieza y estética dental.",
+  "tags": ["HTML", "CSS", "JavaScript", "Landing"],
+  "category": "Clínica dental",
+  "status": "development",
+  "featured": false,
+  "logo": "/apps/nova-dental/icon.png",
+  "screenshots": [],
+  "repo": "AngelDevRD/nova-dental",
+  "demoUrl": "https://nova-dental-ecru.vercel.app",
+  "docsUrl": "https://github.com/AngelDevRD/nova-dental#readme"
+}

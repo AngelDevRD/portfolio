@@ -1,0 +1,16 @@
+{
+  "slug": "luna-bistro",
+  "type": "web",
+  "name": "Luna Bistro",
+  "tagline": "Restaurante — reservas, menú e historia",
+  "description": "Landing de restaurante con menú, galería, reservas y la historia del lugar.",
+  "tags": ["Next.js", "Landing"],
+  "category": "Restaurante",
+  "status": "development",
+  "featured": false,
+  "logo": "/apps/luna-bistro/icon.png",
+  "screenshots": [],
+  "repo": "AngelDevRD/luna-bistro",
+  "demoUrl": "https://luna-bistro-gamma.vercel.app",
+  "docsUrl": "https://github.com/AngelDevRD/luna-bistro#readme"
+}
