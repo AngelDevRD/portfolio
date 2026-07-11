@@ -1,0 +1,16 @@
+{
+  "slug": "gymflow",
+  "type": "web",
+  "name": "GymFlow",
+  "tagline": "SaaS de gestión para gimnasios",
+  "description": "Plataforma SaaS para gimnasios: control de membresías, clases, pagos y asistencia de socios.",
+  "tags": ["Next.js", "SaaS", "Prisma"],
+  "category": "SaaS",
+  "status": "development",
+  "featured": false,
+  "logo": "/apps/gymflow/icon.png",
+  "screenshots": [],
+  "repo": "AngelDevRD/gymflow",
+  "demoUrl": "https://gymflow-flax-ten.vercel.app",
+  "docsUrl": "https://github.com/AngelDevRD/gymflow#readme"
+}

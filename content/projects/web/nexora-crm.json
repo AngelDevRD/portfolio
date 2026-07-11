@@ -1,0 +1,16 @@
+{
+  "slug": "nexora-crm",
+  "type": "web",
+  "name": "Nexora CRM",
+  "tagline": "SaaS de CRM para pequeñas empresas",
+  "description": "Plataforma SaaS de CRM: gestión de clientes, pipeline de ventas y facturación para pequeñas empresas.",
+  "tags": ["Next.js", "SaaS", "Prisma", "Stripe"],
+  "category": "SaaS",
+  "status": "development",
+  "featured": false,
+  "logo": "/apps/nexora-crm/icon.png",
+  "screenshots": [],
+  "repo": "AngelDevRD/nexora-crm",
+  "demoUrl": "https://nexora-crm-flax.vercel.app",
+  "docsUrl": "https://github.com/AngelDevRD/nexora-crm#readme"
+}
