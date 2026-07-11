@@ -51,9 +51,9 @@ export function Footer() {
             © {year} {site.name}. Todos los derechos reservados.
           </p>
           <div className="flex items-center gap-4">
-            <Link href="/#projects" className="hover:text-foreground">Proyectos</Link>
-            <Link href="/apps" className="hover:text-foreground">Apps</Link>
-            <Link href="/#suggest" className="hover:text-foreground">Propón una app</Link>
+            <Link href="/#projects" className="py-2 hover:text-foreground">Proyectos</Link>
+            <Link href="/apps" className="py-2 hover:text-foreground">Apps</Link>
+            <Link href="/#suggest" className="py-2 hover:text-foreground">Propón una app</Link>
           </div>
         </div>
       </div>

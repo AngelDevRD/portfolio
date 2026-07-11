@@ -16,7 +16,7 @@ export function ThemeToggle() {
   return (
     <button
       type="button"
-      aria-label={isDark ? "Activar modo claro" : "Activar modo oscuro"}
+      aria-label={mounted ? (isDark ? "Activar modo claro" : "Activar modo oscuro") : "Cambiar tema"}
       onClick={() => setTheme(isDark ? "light" : "dark")}
       className="glass relative flex h-10 w-10 items-center justify-center rounded-full text-foreground transition-transform hover:scale-105 active:scale-95"
     >

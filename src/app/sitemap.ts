@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getMobileProjects } from "@/data";
+import { getAllProjects } from "@/data";
 import { site } from "@/lib/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -11,13 +11,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/apps`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
   ];
 
-  const apps = await getMobileProjects();
-  const appRoutes: MetadataRoute.Sitemap = apps.map((a) => ({
-    url: `${base}/apps/${a.slug}`,
-    lastModified: new Date(a.github?.releaseDate ?? a.github?.lastCommitAt ?? now),
+  const projects = await getAllProjects();
+  const projectRoutes: MetadataRoute.Sitemap = projects.map((p) => ({
+    url: `${base}/apps/${p.slug}`,
+    lastModified: new Date(p.github?.releaseDate ?? p.github?.lastCommitAt ?? now),
     changeFrequency: "monthly",
     priority: 0.7,
   }));
 
-  return [...staticRoutes, ...appRoutes];
+  return [...staticRoutes, ...projectRoutes];
 }

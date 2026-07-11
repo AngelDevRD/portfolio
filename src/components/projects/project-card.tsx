@@ -1,23 +1,16 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { ExternalLink, Github, FileText, CalendarDays } from "lucide-react";
+import { ExternalLink, Info, CalendarDays } from "lucide-react";
 import type { WebProject } from "@/lib/projects/schema";
 import type { EnrichedProject } from "@/lib/github/types";
 import { TechPill } from "@/components/ui/tech-pill";
-import { formatDate, cn } from "@/lib/utils";
-
-const statusMeta: Record<string, { label: string; className: string }> = {
-  development: { label: "En desarrollo", className: "bg-amber-500/15 text-amber-500" },
-  beta: { label: "Beta", className: "bg-sky-500/15 text-sky-400" },
-  published: { label: "Publicado", className: "bg-emerald-500/15 text-emerald-500" },
-  maintenance: { label: "Mantenimiento", className: "bg-violet-500/15 text-violet-400" },
-  archived: { label: "Archivado", className: "bg-slate-500/15 text-slate-400" },
-};
+import { StatusBadge } from "@/components/ui/status-badge";
+import { formatDate } from "@/lib/utils";
 
 export function ProjectCard({ project }: { project: EnrichedProject<WebProject> }) {
-  const status = statusMeta[project.status] ?? { label: project.status, className: "bg-muted text-muted-foreground" };
   const cardImage = project.screenshots[0] ?? project.logo;
   const updatedAt = project.github?.lastCommitAt;
 
@@ -36,9 +29,7 @@ export function ProjectCard({ project }: { project: EnrichedProject<WebProject> 
           className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-60" />
-        <span className={cn("absolute left-3 top-3 rounded-full px-2.5 py-1 text-xs font-semibold backdrop-blur-md", status.className)}>
-          {status.label}
-        </span>
+        <StatusBadge status={project.status} className="absolute left-3 top-3 backdrop-blur-md" />
         {project.category && (
           <span className="absolute right-3 top-3 rounded-full bg-black/40 px-2.5 py-1 text-xs font-medium text-white backdrop-blur-md">
             {project.category}
@@ -66,14 +57,9 @@ export function ProjectCard({ project }: { project: EnrichedProject<WebProject> 
           <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" className="btn-primary flex-1 !py-2 text-xs">
             <ExternalLink className="h-3.5 w-3.5" /> Ver Demo
           </a>
-          <a href={`https://github.com/${project.repo}`} target="_blank" rel="noopener noreferrer" className="btn-secondary !px-3 !py-2 text-xs" aria-label="Ver código">
-            <Github className="h-3.5 w-3.5" />
-          </a>
-          {project.docsUrl && (
-            <a href={project.docsUrl} target="_blank" rel="noopener noreferrer" className="btn-secondary !px-3 !py-2 text-xs" aria-label="Documentación">
-              <FileText className="h-3.5 w-3.5" />
-            </a>
-          )}
+          <Link href={`/apps/${project.slug}`} className="btn-secondary !py-2 text-xs">
+            <Info className="h-3.5 w-3.5" /> Más info
+          </Link>
         </div>
       </div>
     </motion.article>

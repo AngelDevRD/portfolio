@@ -2,18 +2,19 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Download, Github, Check, ListChecks, History, Cpu } from "lucide-react";
-import { getMobileProjects, getProjectBySlug } from "@/data";
+import { ArrowLeft, Download, ExternalLink, Github, Check, ListChecks, History, Cpu } from "lucide-react";
+import { getAllProjects, getProjectBySlug } from "@/data";
 import { TechPill } from "@/components/ui/tech-pill";
 import { Gallery } from "@/components/apps/gallery";
 import { ShareButton, ReportButton } from "@/components/apps/app-actions";
+import { StatusBadge } from "@/components/ui/status-badge";
 import { formatBytes, formatCount, formatDate } from "@/lib/utils";
 
 export const revalidate = 1800;
 
 export async function generateStaticParams() {
-  const apps = await getMobileProjects();
-  return apps.map((a) => ({ slug: a.slug }));
+  const projects = await getAllProjects();
+  return projects.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -23,7 +24,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const app = await getProjectBySlug(slug);
-  if (!app || app.type !== "mobile") return { title: "App no encontrada" };
+  if (!app) return { title: "Proyecto no encontrado" };
   return {
     title: app.name,
     description: app.tagline,
@@ -38,9 +39,10 @@ export default async function AppDetailPage({
 }) {
   const { slug } = await params;
   const app = await getProjectBySlug(slug);
-  if (!app || app.type !== "mobile") notFound();
+  if (!app) notFound();
 
-  const downloadUrl = `/api/projects/${app.slug}/download`;
+  const isMobile = app.type === "mobile";
+  const downloadUrl = isMobile ? `/api/projects/${app.slug}/download` : undefined;
 
   return (
     <div className="section pt-28 pb-16">
@@ -54,11 +56,16 @@ export default async function AppDetailPage({
           <Image src={app.logo} alt={`${app.name} icono`} fill sizes="96px" className="object-cover" />
         </div>
         <div className="flex-1">
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{app.name}</h1>
+          <div className="mb-1 flex flex-wrap items-center gap-2">
+            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{app.name}</h1>
+            <StatusBadge status={app.status} />
+          </div>
           <p className="mt-1 text-lg text-muted-foreground">{app.tagline}</p>
-          <p className="mt-2 text-sm text-muted-foreground">
-            <span className="font-semibold text-foreground">{formatCount(app.downloads)}</span> descargas
-          </p>
+          {isMobile && (
+            <p className="mt-2 text-sm text-muted-foreground">
+              <span className="font-semibold text-foreground">{formatCount(app.downloads)}</span> descargas
+            </p>
+          )}
           <div className="mt-3 flex flex-wrap items-center gap-2">
             {app.tags.map((t) => (
               <span key={t} className="rounded-full bg-muted px-2.5 py-0.5 text-xs">{t}</span>
@@ -66,9 +73,15 @@ export default async function AppDetailPage({
           </div>
         </div>
         <div className="flex shrink-0 flex-col gap-2">
-          <a href={downloadUrl} className="btn-primary">
-            <Download className="h-4 w-4" /> Descargar
-          </a>
+          {isMobile ? (
+            <a href={downloadUrl} className="btn-primary">
+              <Download className="h-4 w-4" /> Descargar
+            </a>
+          ) : (
+            <a href={app.demoUrl} target="_blank" rel="noopener noreferrer" className="btn-primary">
+              <ExternalLink className="h-4 w-4" /> Ver Demo
+            </a>
+          )}
           <div className="flex gap-2">
             <a
               href={`https://github.com/${app.repo}`}
@@ -122,7 +135,7 @@ export default async function AppDetailPage({
             </section>
           )}
 
-          {app.github?.releaseHistory && app.github.releaseHistory.length > 0 && (
+          {isMobile && app.github?.releaseHistory && app.github.releaseHistory.length > 0 && (
             <section>
               <h2 className="mb-4 flex items-center gap-2 text-xl font-semibold">
                 <History className="h-5 w-5 text-accent" /> Historial de cambios
@@ -149,17 +162,30 @@ export default async function AppDetailPage({
           <div className="card p-6">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Información</h3>
             <dl className="space-y-3 text-sm">
-              <Row label="Versión" value={app.github?.latestVersion ?? "—"} />
-              <Row label="Descargas" value={formatCount(app.downloads)} />
-              <Row label="Tamaño" value={app.github?.apkSizeBytes ? formatBytes(app.github.apkSizeBytes) : "—"} />
+              {isMobile && <Row label="Versión" value={app.github?.latestVersion ?? "—"} />}
+              {isMobile && <Row label="Descargas" value={formatCount(app.downloads)} />}
+              {isMobile && (
+                <Row label="Tamaño" value={app.github?.apkSizeBytes ? formatBytes(app.github.apkSizeBytes) : "—"} />
+              )}
               <Row label="Categoría" value={app.category ?? "—"} />
               <Row
                 label="Actualizado"
-                value={app.github?.releaseDate ? formatDate(app.github.releaseDate) : "—"}
+                value={
+                  isMobile
+                    ? app.github?.releaseDate
+                      ? formatDate(app.github.releaseDate)
+                      : "—"
+                    : app.github?.lastCommitAt
+                      ? formatDate(app.github.lastCommitAt)
+                      : "—"
+                }
               />
               {app.github?.license && <Row label="Licencia" value={app.github.license} />}
               {typeof app.github?.contributors === "number" && (
                 <Row label="Contribuidores" value={String(app.github.contributors)} />
+              )}
+              {typeof app.github?.starsCount === "number" && (
+                <Row label="Estrellas" value={String(app.github.starsCount)} />
               )}
             </dl>
           </div>
