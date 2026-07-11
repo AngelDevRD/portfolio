@@ -31,6 +31,8 @@ const projectBaseSchema = z.object({
 export const mobileProjectSchema = projectBaseSchema.extend({
   type: z.literal("mobile"),
   packageId: z.string().min(1),
+  /** Version por debajo de la cual la app debe forzar la actualizacion (in-app updater). Opcional. */
+  minSupportedVersion: z.string().optional(),
 });
 
 export const webProjectSchema = projectBaseSchema.extend({
