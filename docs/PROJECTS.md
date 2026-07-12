@@ -10,9 +10,9 @@ esta tabla cada vez que se agregue o retire un proyecto del catálogo.
 
 | Nombre | Slug | Estado | Tecnologías | Package ID | Repo | Última versión | Icono | Ruta |
 |---|---|---|---|---|---|---|---|---|
-| Finanzas360 | `finanzas360` | development | Flutter, Android | `com.angeldevrd.finanzas360` | [AngelDevRD/finanzas360](https://github.com/AngelDevRD/finanzas360) | v1.0.0 | `/apps/finanzas360/icon.png` | `/apps/finanzas360` |
-| MiTienda 360 | `mi-negocio` | development | Flutter, Android, Offline-first | `com.angeldevrd.appgestion` | [AngelDevRD/mi-negocio](https://github.com/AngelDevRD/mi-negocio) | v1.1.0 | `/apps/mi-negocio/icon.png` | `/apps/mi-negocio` |
-| NexFit | `nexfit` | development | Flutter, Android | `com.angeldevrd.nexfit` | [AngelDevRD/nexfit](https://github.com/AngelDevRD/nexfit) | v1.0.0 | `/apps/nexfit/icon.png` | `/apps/nexfit` |
+| Finanzas360 | `finanzas360` | development | Flutter, Android | `com.angeldevrd.finanzas360` | [AngelDevRD/finanzas360](https://github.com/AngelDevRD/finanzas360) | v1.0.3 | `/apps/finanzas360/icon.png` | `/apps/finanzas360` |
+| MiTienda 360 | `mi-negocio` | development | Flutter, Android, Offline-first | `com.angeldevrd.appgestion` | [AngelDevRD/mi-negocio](https://github.com/AngelDevRD/mi-negocio) | v1.1.1 | `/apps/mi-negocio/icon.png` | `/apps/mi-negocio` |
+| NexFit | `nexfit` | development | Flutter, Android | `com.angeldevrd.nexfit` | [AngelDevRD/nexfit](https://github.com/AngelDevRD/nexfit) | v1.0.1 | `/apps/nexfit/icon.png` | `/apps/nexfit` |
 
 Detalle completo en [APPS.md](./APPS.md).
 
@@ -23,7 +23,7 @@ Detalle completo en [APPS.md](./APPS.md).
 | Snake Evolution | `snake-evolution` | development | Arcade | `com.portfolio.snakeevolution.snake_evolution` | [AngelDevRD/snake_evolution](https://github.com/AngelDevRD/snake_evolution) | v1.0.1 | `/apps/snake-evolution/icon.png` | `/apps/snake-evolution` |
 | Number Merge | `number-merge` | development | Puzzle | `com.portfolio.numbermerge.number_merge` | [AngelDevRD/number_merge](https://github.com/AngelDevRD/number_merge) | v1.0.1 | `/apps/number-merge/icon.png` | `/apps/number-merge` |
 | Memory Cards | `memory-cards` | development | Puzzle | `com.portfolio.memorycards.memory_cards` | [AngelDevRD/memory_cards](https://github.com/AngelDevRD/memory_cards) | v1.0.1 | `/apps/memory-cards/icon.png` | `/apps/memory-cards` |
-| Tower | `stack-tower` | development | Arcade | `com.portfolio.stacktower.stack_tower` | [AngelDevRD/stack_tower](https://github.com/AngelDevRD/stack_tower) | v1.0.0 | `/apps/stack-tower/icon.png` | `/apps/stack-tower` |
+| Tower | `stack-tower` | development | Arcade | `com.portfolio.stacktower.stack_tower` | [AngelDevRD/stack_tower](https://github.com/AngelDevRD/stack_tower) | v1.0.1 | `/apps/stack-tower/icon.png` | `/apps/stack-tower` |
 
 Detalle completo en [GAMES.md](./GAMES.md).
 

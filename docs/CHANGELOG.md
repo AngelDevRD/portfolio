@@ -42,6 +42,55 @@ más recientes primero.
   breakpoint. El código ya usaba `.section`, grids con breakpoints, `truncate`, `min-w-0` y
   `flex-wrap` de forma consistente; no se encontraron regresiones que corregir.
 
+## 2026-07-11 (continuación) — Fix de zoom inicial en móvil y correcciones en 4 repos Flutter
+
+- **Zoom inicial en móvil**: causa raíz encontrada en `src/app/layout.tsx` — el `export const
+  viewport` solo definía `themeColor`, sin `width`/`initialScale`. En Next.js, un `viewport`
+  custom **reemplaza** el default en vez de complementarlo, así que el meta tag generado no
+  incluía `width=device-width, initial-scale=1`. Los navegadores móviles entonces renderizaban
+  el layout como si fuera de escritorio (~980px) y lo escalaban para que quepa — de ahí el
+  "zoom" que se corregía solo al hacer zoom out manualmente. Fix: agregar `width:
+  "device-width", initialScale: 1` al objeto `viewport`. Confirmado en el HTML generado
+  (`<meta name="viewport" content="width=device-width, initial-scale=1">`). Se repitieron
+  además los chequeos de `100vw`, anchos fijos, `min-width` y animaciones de carga pedidos
+  explícitamente — ninguno era la causa; el único uso de `100vw` es en atributos `sizes` de
+  `next/image` (correcto), y las animaciones de entrada (`Reveal`, `Hero`) solo usan
+  `transform: translate` (no afecta el ancho de la caja).
+- **Nombre/icono instalado de 4 apps Flutter** (repos fuera de este workspace, clonados y
+  corregidos ad-hoc vía `gh`):
+  - **Tower (`AngelDevRD/stack_tower`)**: `android:label` decía `"stack_tower"` (nombre
+    interno) → corregido a `"Tower"`. Icono launcher reemplazado (usaba el genérico de
+    Flutter) por el oficial. Publicado como `v1.0.1`.
+  - **NexFit (`AngelDevRD/nexfit`)**: el `android:label` y el icono launcher **ya estaban
+    corregidos** en commits previos (`22d2c6f`, `d9b20e4`, `84bfa4b`, `688f412`, todos del
+    2026-07-11) pero nunca se había publicado un release con esos cambios — el APK instalada
+    por el usuario seguía siendo la `v1.0.0` del 2026-07-05, de ahí que mostrara "AppGym" y el
+    icono genérico. Se reemplazó además el texto interno "AppGym" visible en pantallas
+    (login, lista de ejercicios, wearables, nombre del archivo de backup exportado) por
+    "NexFit". Publicado como `v1.0.1`.
+    - **Bug no relacionado detectado** (análisis, sin fix aplicado): `lib/core/app_config.dart`
+      apunta por defecto a `http://10.0.2.2:8000` (loopback del emulador Android) cuando no se
+      pasa `--dart-define=API_BASE_URL=...`, y el workflow de release
+      (`flutter build apk --release`) no pasa ese override — la APK pública distribuida no
+      puede conectar a ningún backend real. No es un problema del sistema de auto-actualización
+      del portafolio; requiere la URL real del backend desplegado para corregirse.
+  - **Finanzas360 (`AngelDevRD/finanzas360`)**: el icono adaptive ya estaba corregido en el
+    commit `774461b` (2026-07-10, sesión previa) pero tampoco se había publicado — el pubspec
+    ya estaba en `1.0.3+4` sin ningún tag/release correspondiente. Solo se publicó el HEAD
+    existente como `v1.0.3` (sin cambios de código).
+  - **Mi Negocio 360 (`AngelDevRD/mi-negocio`)**: bug real encontrado y corregido. Usa
+    adaptive icon (`background` sólido + `foreground` con `inset="16%"` obligatorio en el
+    XML). El foreground ya llenaba su propio canvas y su color de borde ya coincidía con el
+    `ic_launcher_background`, pero el inset del 16% igual encogía todo el conjunto dejando un
+    anillo de color plano visible alrededor del ícono real (confirmado simulando el render
+    adaptive con máscara circular antes/después). Fix: escalar el contenido del foreground
+    ~1.47× (`1 / (1 - 2×0.16)`) antes de recortarlo al canvas, para que tras el inset
+    obligatorio el resultado visible llene el círculo completo — mismo principio que la
+    corrección previa de Finanzas360. Publicado como `v1.1.1`.
+  - Los 4 repos usan el mismo patrón de CI (`GitHub Actions` con trigger `on: push: tags:
+    "v*.*.*"` → build + release), validado con `tools/verify-release-version.mjs` antes de
+    cada tag.
+
 ## Antes de 2026-07-11
 
 Sin registro — no existía este documento. Usar `git log` para el historial de commits

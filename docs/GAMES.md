@@ -35,9 +35,11 @@ Todos distribuidos fuera de Google Play, mismo mecanismo que las apps (ver
 - **Slug:** `stack-tower` · **Package ID:** `com.portfolio.stacktower.stack_tower`
 - **Repo:** [AngelDevRD/stack_tower](https://github.com/AngelDevRD/stack_tower) (privado)
 - **Categoría:** Arcade
-- **Última versión publicada:** v1.0.0 (2026-07-11)
+- **Última versión publicada:** v1.0.1 (2026-07-11)
 - **Icono:** `public/apps/stack-tower/icon.png`
 - **Descripción:** apilar bloques en movimiento; cada acierto suma altura y precisión.
 - **Nota:** agregado al catálogo el 2026-07-11 (antes no existía en el portafolio pese a
   tener repo y release publicados). Es el ejemplo de referencia de "cómo agregar un
-  proyecto nuevo" en [PROJECTS.md](./PROJECTS.md).
+  proyecto nuevo" en [PROJECTS.md](./PROJECTS.md). El launcher de Android mostraba
+  "stack_tower" (nombre interno) y el icono genérico de Flutter — corregido a "Tower" con
+  el icono oficial en `v1.0.1`.
