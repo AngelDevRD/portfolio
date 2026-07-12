@@ -24,6 +24,8 @@ const projectBaseSchema = z.object({
   video: z.string().optional(),
   repo: z.string().regex(/^[\w.-]+\/[\w.-]+$/, "repo debe tener el formato 'owner/repo'"),
   docsUrl: z.string().url().optional(),
+  /** Nombre de archivo (sin extension) usado al descargar la APK. Si falta, se deriva de "name". */
+  downloadName: z.string().regex(/^[\w-]+$/, "downloadName debe ser alfanumerico sin espacios").optional(),
   features: z.array(z.string()).optional(),
   requirements: z.array(z.string()).optional(),
 });

@@ -1,0 +1,17 @@
+{
+  "slug": "stack-tower",
+  "type": "mobile",
+  "name": "Tower",
+  "tagline": "Apila bloques y llega lo más alto posible",
+  "description": "Tower es un juego arcade de apilar bloques en movimiento: cada acierto suma altura y precisión, cada fallo recorta la torre.",
+  "tags": ["Flutter", "Android", "Juego"],
+  "category": "Arcade",
+  "status": "development",
+  "featured": false,
+  "logo": "/apps/stack-tower/icon.png",
+  "screenshots": [],
+  "repo": "AngelDevRD/stack_tower",
+  "packageId": "com.portfolio.stacktower.stack_tower",
+  "downloadName": "Tower",
+  "docsUrl": "https://github.com/AngelDevRD/stack_tower#readme"
+}
