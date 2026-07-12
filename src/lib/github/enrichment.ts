@@ -37,11 +37,11 @@ function authHeaders(): HeadersInit {
   };
 }
 
-async function ghFetch<T>(pathAndQuery: string): Promise<T | null> {
+async function ghFetch<T>(pathAndQuery: string, options: { noStore?: boolean } = {}): Promise<T | null> {
   try {
     const res = await fetch(`${GITHUB_API}${pathAndQuery}`, {
       headers: authHeaders(),
-      next: { revalidate: REVALIDATE_SECONDS },
+      ...(options.noStore ? { cache: "no-store" } : { next: { revalidate: REVALIDATE_SECONDS } }),
     });
     if (!res.ok) {
       console.warn(`[github] ${pathAndQuery} -> ${res.status}`);
@@ -63,7 +63,12 @@ export async function getGithubEnrichment(
     ghFetch<GhRepo>(`/repos/${repo}`),
     ghFetch<Record<string, number>>(`/repos/${repo}/languages`),
     ghFetch<unknown[]>(`/repos/${repo}/contributors?per_page=100&anon=false`),
-    type === "mobile" ? ghFetch<GhRelease[]>(`/repos/${repo}/releases`) : Promise.resolve(null),
+    // Sin cache: es la data que decide qué APK se descarga/instala -- servir un release
+    // viejo por una revalidacion de ISR que nunca se disparo (sitio de bajo trafico, nadie
+    // pega la ruta seguido) rompe la actualizacion para el usuario final.
+    type === "mobile"
+      ? ghFetch<GhRelease[]>(`/repos/${repo}/releases`, { noStore: true })
+      : Promise.resolve(null),
   ]);
 
   if (!repoInfo) return null;
