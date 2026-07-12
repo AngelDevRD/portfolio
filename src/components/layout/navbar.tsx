@@ -43,11 +43,11 @@ export function Navbar() {
           scrolled ? "glass-strong shadow-lg" : "bg-transparent"
         )}
       >
-        <Link href="/" className="group flex items-center gap-2 px-2 font-semibold">
-          <span className="grid h-8 w-8 place-items-center rounded-xl bg-accent text-sm text-accent-foreground shadow-md">
+        <Link href="/" className="group flex min-w-0 shrink items-center gap-2 px-2 font-semibold">
+          <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-accent text-sm text-accent-foreground shadow-md">
             {site.name.charAt(0)}
           </span>
-          <span className="hidden sm:block">{site.name.split(" ")[0]}</span>
+          <span className="hidden truncate sm:block">{site.name.split(" ")[0]}</span>
         </Link>
 
         <div className="hidden items-center gap-1 md:flex">
@@ -62,14 +62,14 @@ export function Navbar() {
           ))}
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1">
           <ThemeToggle />
           <button
             type="button"
             aria-label="Abrir menú"
             aria-expanded={open}
             onClick={() => setOpen((o) => !o)}
-            className="glass flex h-10 w-10 items-center justify-center rounded-full md:hidden"
+            className="glass flex h-10 w-10 shrink-0 items-center justify-center rounded-full md:hidden"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
