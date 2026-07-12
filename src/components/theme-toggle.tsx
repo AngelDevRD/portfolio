@@ -1,15 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import { Moon, Sun } from "lucide-react";
 import { motion } from "framer-motion";
 
+const subscribeNever = () => () => {};
+
+/** true solo tras la hidratación en el cliente; evita el mismatch de SSR con next-themes sin setState en un efecto. */
+function useMounted() {
+  return useSyncExternalStore(subscribeNever, () => true, () => false);
+}
+
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
+  const mounted = useMounted();
 
   const isDark = theme === "dark";
 
