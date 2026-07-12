@@ -6,12 +6,17 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-/** Format a byte count into a compact human label (1.2 KB, 24.3 MB). */
+/**
+ * Format a byte count into a compact human label (1.2 KB, 24.3 MB).
+ * Usa base decimal (1000), igual que el tamaño que Android/el navegador muestran
+ * para el archivo ya descargado -- con base binaria (1024) el número no coincide
+ * con lo que el usuario ve en su descarga real.
+ */
 export function formatBytes(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  const kb = bytes / 1024;
-  if (kb < 1024) return `${kb.toFixed(1)} KB`;
-  return `${(kb / 1024).toFixed(1)} MB`;
+  if (bytes < 1000) return `${bytes} B`;
+  const kb = bytes / 1000;
+  if (kb < 1000) return `${kb.toFixed(1)} KB`;
+  return `${(kb / 1000).toFixed(1)} MB`;
 }
 
 /** Format a count into a compact human label (1.2k, 3.4M). */
