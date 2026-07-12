@@ -1,21 +1,16 @@
 import { NextResponse } from "next/server";
 import { getProjectRepository } from "@/lib/projects/factory";
 import { incrementDownloadCount } from "@/lib/downloads/counter";
+import { getApkStorageProvider } from "@/lib/storage/factory";
+import { apkFilename } from "@/lib/storage/apk-provider";
 
 export const dynamic = "force-dynamic";
 
-function authHeaders(accept: string): HeadersInit {
-  const token = process.env.GITHUB_TOKEN;
-  return {
-    Accept: accept,
-    "X-GitHub-Api-Version": "2022-11-28",
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-  };
-}
-
 /**
- * Proxy de descarga: el token de GitHub vive solo en el servidor. El navegador nunca lo ve,
- * solo recibe un redirect a la URL firmada y de corta duración que GitHub genera por request.
+ * Proxy de descarga: siempre streamea el binario a través del servidor (nunca redirige al
+ * origen real), para poder forzar el nombre de archivo real vía Content-Disposition en
+ * todos los navegadores. El origen (hoy GitHub Releases) es intercambiable — ver
+ * @/lib/storage/factory.
  */
 export async function GET(_req: Request, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -24,32 +19,18 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
     return NextResponse.json({ error: "App no encontrada" }, { status: 404 });
   }
 
-  const assetUrl = project.github?.downloadAssetUrl;
-  if (!assetUrl) {
+  const asset = await getApkStorageProvider().getApk(project);
+  if (!asset) {
     return NextResponse.redirect(`https://github.com/${project.repo}/releases`);
   }
 
-  const assetRes = await fetch(assetUrl, {
-    headers: authHeaders("application/octet-stream"),
-    redirect: "manual",
-    cache: "no-store",
+  await incrementDownloadCount(project.slug);
+
+  return new NextResponse(asset.body, {
+    headers: {
+      "Content-Type": "application/vnd.android.package-archive",
+      "Content-Disposition": `attachment; filename="${apkFilename(project)}"`,
+      ...(asset.contentLength ? { "Content-Length": String(asset.contentLength) } : {}),
+    },
   });
-
-  const location = assetRes.headers.get("location");
-  if (assetRes.status >= 300 && assetRes.status < 400 && location) {
-    await incrementDownloadCount(project.slug);
-    return NextResponse.redirect(location, { status: 302 });
-  }
-
-  if (assetRes.ok && assetRes.body) {
-    await incrementDownloadCount(project.slug);
-    return new NextResponse(assetRes.body, {
-      headers: {
-        "Content-Type": "application/vnd.android.package-archive",
-        "Content-Disposition": `attachment; filename="${project.slug}.apk"`,
-      },
-    });
-  }
-
-  return NextResponse.json({ error: "No se pudo obtener el archivo" }, { status: 502 });
 }

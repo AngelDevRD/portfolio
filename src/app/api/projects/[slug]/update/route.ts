@@ -15,6 +15,10 @@ export const revalidate = 1800;
  * instalada. No exponemos un "build number" separado: GitHub Releases no tiene ese concepto
  * nativo y mantenerlo sincronizado a mano solo genera desincronizacion; la version semver del
  * tag del release es la unica fuente de verdad.
+ *
+ * "apk_sha256" viene del campo "digest" que GitHub calcula sobre cada asset del release
+ * (formato "sha256:<hex>"); el cliente debe verificarlo contra el archivo descargado antes
+ * de instalar. Contrato completo del cliente en docs/UPDATE_SYSTEM.md.
  */
 export async function GET(_req: Request, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -39,6 +43,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
     version,
     minSupportedVersion: project.minSupportedVersion ?? null,
     apk_url: `${base}/api/projects/${project.slug}/download`,
+    apk_size_bytes: project.github?.apkSizeBytes ?? null,
+    apk_sha256: project.github?.apkSha256 ?? null,
     changes,
     releaseDate: project.github?.releaseDate ?? null,
   });

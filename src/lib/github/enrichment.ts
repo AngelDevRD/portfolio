@@ -13,7 +13,13 @@ interface GhRelease {
   tag_name: string;
   published_at: string;
   body: string | null;
-  assets: { name: string; size: number; browser_download_url: string; url: string }[];
+  assets: {
+    name: string;
+    size: number;
+    browser_download_url: string;
+    url: string;
+    digest?: string | null;
+  }[];
 }
 
 /** Quita la línea "**Full Changelog**: ..." que GitHub agrega automáticamente cuando un release no tiene notas propias. */
@@ -79,6 +85,7 @@ export async function getGithubEnrichment(
     enrichment.releaseDate = latest.published_at;
     enrichment.releaseNotes = cleanReleaseNotes(latest.body) || undefined;
     enrichment.apkSizeBytes = latestApk?.size;
+    enrichment.apkSha256 = latestApk?.digest ?? undefined;
     enrichment.downloadUrl = latestApk?.browser_download_url;
     enrichment.downloadAssetUrl = latestApk?.url;
     enrichment.releaseHistory = releases.slice(0, 10).map((r): ReleaseHistoryEntry => {
@@ -89,6 +96,7 @@ export async function getGithubEnrichment(
         notes: cleanReleaseNotes(r.body),
         downloadUrl: apk?.browser_download_url ?? "",
         sizeBytes: apk?.size ?? 0,
+        sha256: apk?.digest ?? undefined,
       };
     });
   }
