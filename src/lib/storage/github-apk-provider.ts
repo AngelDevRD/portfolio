@@ -1,4 +1,4 @@
-import type { ApkAsset, ApkStorageProvider } from "./apk-provider";
+import type { AssetKind, ApkAsset, ApkStorageProvider } from "./apk-provider";
 import type { EnrichedProject } from "@/lib/github/types";
 import type { CatalogProject } from "@/lib/projects/schema";
 
@@ -13,8 +13,10 @@ function authHeaders(accept: string): HeadersInit {
 
 /** Lee el asset del release de GitHub y lo streamea siempre server-side (el token nunca llega al navegador). */
 export class GithubReleaseApkProvider implements ApkStorageProvider {
-  async getApk(project: EnrichedProject<CatalogProject>): Promise<ApkAsset | null> {
-    const assetUrl = project.type === "mobile" ? project.github?.downloadAssetUrl : undefined;
+  async getApk(project: EnrichedProject<CatalogProject>, kind: AssetKind = "apk"): Promise<ApkAsset | null> {
+    const github = project.type === "mobile" ? project.github : undefined;
+    const assetUrl =
+      kind === "aab" ? github?.aabAssetUrl : kind === "windows" ? github?.windowsAssetUrl : github?.downloadAssetUrl;
     if (!assetUrl) return null;
 
     const res = await fetch(assetUrl, {

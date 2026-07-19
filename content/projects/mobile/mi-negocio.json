@@ -4,7 +4,7 @@
   "name": "MiTienda 360",
   "tagline": "Gestión offline-first para pequeños negocios",
   "description": "Gestión de embutidoras, colmados y pequeños negocios alimenticios, pensada para funcionar sin conexión.",
-  "tags": ["Flutter", "Android", "Offline-first"],
+  "tags": ["Flutter", "Android", "Windows", "Offline-first"],
   "category": "Negocios",
   "status": "development",
   "featured": false,

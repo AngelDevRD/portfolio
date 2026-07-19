@@ -30,11 +30,18 @@ const projectBaseSchema = z.object({
   requirements: z.array(z.string()).optional(),
 });
 
+export const iosDistributionSchema = z.enum(["testflight", "app_store", "not_available"]);
+export type IosDistribution = z.infer<typeof iosDistributionSchema>;
+
 export const mobileProjectSchema = projectBaseSchema.extend({
   type: z.literal("mobile"),
   packageId: z.string().min(1),
   /** Version por debajo de la cual la app debe forzar la actualizacion (in-app updater). Opcional. */
   minSupportedVersion: z.string().optional(),
+  /** Metodo de distribucion iOS vigente. Apple no expone un "ultimo asset" publico como GitHub Releases,
+   * asi que esto es el unico dato manual (se setea una vez por app, no por build). */
+  iosDistribution: iosDistributionSchema.optional(),
+  testflightUrl: z.string().url().optional(),
 });
 
 export const webProjectSchema = projectBaseSchema.extend({

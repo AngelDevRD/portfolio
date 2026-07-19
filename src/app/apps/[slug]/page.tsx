@@ -2,13 +2,15 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Download, ExternalLink, Github, Check, ListChecks, History, Cpu } from "lucide-react";
+import { ArrowLeft, Download, ExternalLink, Github, Check, ListChecks, History, Cpu, Smartphone, MonitorDown, Apple } from "lucide-react";
 import { getAllProjects, getProjectBySlug } from "@/data";
 import { TechPill } from "@/components/ui/tech-pill";
 import { Gallery } from "@/components/apps/gallery";
 import { ShareButton, ReportButton } from "@/components/apps/app-actions";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { formatBytes, formatCount, formatDate } from "@/lib/utils";
+import type { EnrichedProject } from "@/lib/github/types";
+import type { MobileProject } from "@/lib/projects/schema";
 
 export const revalidate = 1800;
 
@@ -159,6 +161,8 @@ export default async function AppDetailPage({
 
         {/* Barra lateral */}
         <aside className="space-y-6">
+          {isMobile && <PlatformsCard app={app} />}
+
           <div className="card p-6">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Información</h3>
             <dl className="space-y-3 text-sm">
@@ -227,6 +231,70 @@ function Row({ label, value }: { label: string; value: string }) {
     <div className="flex items-center justify-between">
       <dt className="text-muted-foreground">{label}</dt>
       <dd className="font-medium">{value}</dd>
+    </div>
+  );
+}
+
+/** Descargas por plataforma: cada bloque solo aparece si el pipeline ya publico ese artefacto
+ * (Android/Windows via GitHub Releases) o si la app tiene un metodo de distribucion iOS configurado. */
+function PlatformsCard({ app }: { app: EnrichedProject<MobileProject> }) {
+  const gh = app.github;
+  const hasAndroid = Boolean(gh?.downloadUrl);
+  const hasAab = Boolean(gh?.aabDownloadUrl);
+  const hasWindows = Boolean(gh?.windowsDownloadUrl);
+  const hasIos = Boolean(app.iosDistribution && app.iosDistribution !== "not_available");
+
+  if (!hasAndroid && !hasWindows && !hasIos) return null;
+
+  return (
+    <div className="card space-y-4 p-6">
+      <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Plataformas</h3>
+
+      {hasAndroid && (
+        <div>
+          <div className="mb-2 flex items-center gap-2 text-sm font-medium">
+            <Smartphone className="h-4 w-4 text-accent" /> Android
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <a href={`/api/projects/${app.slug}/download?platform=apk`} className="btn-secondary !py-1.5 text-xs">
+              APK{gh?.apkSizeBytes ? ` (${formatBytes(gh.apkSizeBytes)})` : ""}
+            </a>
+            {hasAab && (
+              <a href={`/api/projects/${app.slug}/download?platform=aab`} className="btn-secondary !py-1.5 text-xs">
+                AAB{gh?.aabSizeBytes ? ` (${formatBytes(gh.aabSizeBytes)})` : ""}
+              </a>
+            )}
+          </div>
+        </div>
+      )}
+
+      {hasWindows && (
+        <div>
+          <div className="mb-2 flex items-center gap-2 text-sm font-medium">
+            <MonitorDown className="h-4 w-4 text-accent" /> Windows
+          </div>
+          <a href={`/api/projects/${app.slug}/download?platform=windows`} className="btn-secondary !py-1.5 text-xs">
+            Descargar{gh?.windowsSizeBytes ? ` (${formatBytes(gh.windowsSizeBytes)})` : ""}
+          </a>
+        </div>
+      )}
+
+      {hasIos && (
+        <div>
+          <div className="mb-2 flex items-center gap-2 text-sm font-medium">
+            <Apple className="h-4 w-4 text-accent" /> iOS
+          </div>
+          {app.iosDistribution === "testflight" && app.testflightUrl ? (
+            <a href={app.testflightUrl} target="_blank" rel="noopener noreferrer" className="btn-secondary !py-1.5 text-xs">
+              Unirse en TestFlight
+            </a>
+          ) : (
+            <span className="text-xs text-muted-foreground">
+              {app.iosDistribution === "app_store" ? "Disponible en App Store" : "Beta cerrada"}
+            </span>
+          )}
+        </div>
+      )}
     </div>
   );
 }

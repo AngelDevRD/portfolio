@@ -84,7 +84,12 @@ export async function getGithubEnrichment(
   if (type === "mobile" && Array.isArray(releases) && releases.length > 0) {
     const [latest] = releases;
     const findApk = (r: GhRelease) => r.assets?.find((a) => a.name.endsWith(".apk"));
+    const findAab = (r: GhRelease) => r.assets?.find((a) => a.name.endsWith(".aab"));
+    const findWindows = (r: GhRelease) =>
+      r.assets?.find((a) => a.name.endsWith("-windows.zip") || a.name.endsWith(".exe"));
     const latestApk = findApk(latest);
+    const latestAab = findAab(latest);
+    const latestWindows = findWindows(latest);
 
     enrichment.latestVersion = latest.tag_name;
     enrichment.releaseDate = latest.published_at;
@@ -93,6 +98,13 @@ export async function getGithubEnrichment(
     enrichment.apkSha256 = latestApk?.digest ?? undefined;
     enrichment.downloadUrl = latestApk?.browser_download_url;
     enrichment.downloadAssetUrl = latestApk?.url;
+    enrichment.aabSizeBytes = latestAab?.size;
+    enrichment.aabDownloadUrl = latestAab?.browser_download_url;
+    enrichment.aabAssetUrl = latestAab?.url;
+    enrichment.windowsSizeBytes = latestWindows?.size;
+    enrichment.windowsDownloadUrl = latestWindows?.browser_download_url;
+    enrichment.windowsAssetUrl = latestWindows?.url;
+    enrichment.windowsFilename = latestWindows?.name;
     enrichment.releaseHistory = releases.slice(0, 10).map((r): ReleaseHistoryEntry => {
       const apk = findApk(r);
       return {

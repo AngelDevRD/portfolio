@@ -1,0 +1,16 @@
+{
+  "slug": "anivault",
+  "type": "mobile",
+  "name": "AniVault",
+  "tagline": "Tu biblioteca personal de anime y manga",
+  "description": "AniVault organiza tu biblioteca de anime y manga: seguimiento de progreso, estadisticas y recomendaciones con IA.",
+  "tags": ["Flutter", "Android", "Windows"],
+  "category": "Entretenimiento",
+  "status": "development",
+  "featured": false,
+  "logo": "/apps/anivault/icon.png",
+  "screenshots": [],
+  "repo": "negriuspro/anivault",
+  "packageId": "com.anivault.anivault",
+  "docsUrl": "https://github.com/negriuspro/anivault#readme"
+}

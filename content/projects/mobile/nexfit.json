@@ -4,7 +4,7 @@
   "name": "NexFit",
   "tagline": "Entrenador personal inteligente para gimnasio",
   "description": "NexFit es un entrenador personal inteligente para gimnasio, con seguimiento de rutinas, entrenamientos y metas.",
-  "tags": ["Flutter", "Android"],
+  "tags": ["Flutter", "Android", "Windows"],
   "category": "Fitness",
   "status": "development",
   "featured": false,

@@ -67,6 +67,14 @@ export function AppCard({ app }: { app: EnrichedProject<MobileProject> }) {
           <Info className="h-4 w-4" /> Más info
         </Link>
       </div>
+
+      {(app.github?.windowsDownloadUrl || app.iosDistribution) && (
+        <div className="mt-2 flex flex-wrap gap-1.5 text-xs text-muted-foreground">
+          {app.github?.windowsDownloadUrl && <span className="rounded-full bg-muted px-2 py-0.5">Windows</span>}
+          {app.iosDistribution === "testflight" && <span className="rounded-full bg-muted px-2 py-0.5">TestFlight</span>}
+          {app.iosDistribution === "app_store" && <span className="rounded-full bg-muted px-2 py-0.5">App Store</span>}
+        </div>
+      )}
     </motion.article>
   );
 }

@@ -26,6 +26,15 @@ export interface GithubEnrichment {
   /** URL de la API de GitHub para el asset (usada por el proxy de descarga server-side; no es descargable directo desde el navegador en repos privados). */
   downloadAssetUrl?: string;
   releaseHistory?: ReleaseHistoryEntry[];
+  // AAB (Google Play) y Windows: mismo release, asset distinto por nombre de archivo
+  // (ver convención "<slug>-android.aab" / "<slug>-windows.zip" en codemagic.yaml de cada app).
+  aabSizeBytes?: number;
+  aabDownloadUrl?: string;
+  aabAssetUrl?: string;
+  windowsSizeBytes?: number;
+  windowsDownloadUrl?: string;
+  windowsAssetUrl?: string;
+  windowsFilename?: string;
 }
 
 export type EnrichedProject<T> = T & { github: GithubEnrichment | null; downloads: number };

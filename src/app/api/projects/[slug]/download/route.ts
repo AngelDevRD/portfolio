@@ -12,14 +12,26 @@ export const dynamic = "force-dynamic";
  * todos los navegadores. El origen (hoy GitHub Releases) es intercambiable — ver
  * @/lib/storage/factory.
  */
-export async function GET(_req: Request, { params }: { params: Promise<{ slug: string }> }) {
+const CONTENT_TYPE_BY_KIND = {
+  apk: "application/vnd.android.package-archive",
+  aab: "application/octet-stream",
+  windows: "application/zip",
+} as const;
+
+export async function GET(req: Request, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const url = new URL(req.url);
+  const kind = (url.searchParams.get("platform") as "apk" | "aab" | "windows" | null) ?? "apk";
+  if (kind !== "apk" && kind !== "aab" && kind !== "windows") {
+    return NextResponse.json({ error: "platform invalido" }, { status: 400 });
+  }
+
   const project = await getProjectRepository().getBySlug(slug);
   if (!project || project.type !== "mobile") {
     return NextResponse.json({ error: "App no encontrada" }, { status: 404 });
   }
 
-  const asset = await getApkStorageProvider().getApk(project);
+  const asset = await getApkStorageProvider().getApk(project, kind);
   if (!asset) {
     return NextResponse.redirect(`https://github.com/${project.repo}/releases`);
   }
@@ -28,8 +40,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
 
   return new NextResponse(asset.body, {
     headers: {
-      "Content-Type": "application/vnd.android.package-archive",
-      "Content-Disposition": `attachment; filename="${apkFilename(project)}"`,
+      "Content-Type": CONTENT_TYPE_BY_KIND[kind],
+      "Content-Disposition": `attachment; filename="${apkFilename(project, kind)}"`,
       ...(asset.contentLength ? { "Content-Length": String(asset.contentLength) } : {}),
     },
   });

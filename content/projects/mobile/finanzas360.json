@@ -4,7 +4,7 @@
   "name": "Finanzas360",
   "tagline": "Gestión financiera personal",
   "description": "Finanzas 360 te ayuda a organizar y dar seguimiento a tus finanzas personales.",
-  "tags": ["Flutter", "Android"],
+  "tags": ["Flutter", "Android", "Windows"],
   "category": "Finanzas personales",
   "status": "development",
   "featured": false,
