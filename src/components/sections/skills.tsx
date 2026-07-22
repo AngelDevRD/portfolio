@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import {
   Layout, Server, Database, Smartphone, Sparkles, Cloud, Palette, type LucideIcon,
 } from "lucide-react";
@@ -34,23 +33,14 @@ export function Skills() {
                   <h3 className="font-semibold">{cat.title}</h3>
                 </div>
 
-                <div className="space-y-4">
+                <div className="flex flex-wrap gap-2">
                   {cat.skills.map((s) => (
-                    <div key={s.name}>
-                      <div className="mb-1.5 flex items-center justify-between text-sm">
-                        <span className="font-medium">{s.name}</span>
-                        <span className="text-muted-foreground">{s.level}%</span>
-                      </div>
-                      <div className="h-2 overflow-hidden rounded-full bg-muted">
-                        <motion.div
-                          className="h-full rounded-full bg-gradient-to-r from-accent to-sky-400"
-                          initial={{ width: 0 }}
-                          whileInView={{ width: `${s.level}%` }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 1, ease: "easeOut", delay: 0.1 }}
-                        />
-                      </div>
-                    </div>
+                    <span
+                      key={s.name}
+                      className="rounded-full bg-muted px-3 py-1.5 text-sm font-medium"
+                    >
+                      {s.name}
+                    </span>
                   ))}
                 </div>
               </div>
