@@ -97,7 +97,7 @@ export async function putPortfolioBinaryFile(filePath: string, buffer: Buffer, m
 }
 
 function portfolioRepo(): [string, string] {
-  const value = process.env.PORTFOLIO_REPO ?? "AngelDevRD/protafolioweb";
+  const value = process.env.PORTFOLIO_REPO ?? "AngelDevRD/portfolio";
   const [owner, repo] = value.split("/");
   return [owner, repo];
 }
