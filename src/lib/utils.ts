@@ -26,6 +26,12 @@ export function formatCount(n: number): string {
   return `${(n / 1_000_000).toFixed(1)}M`;
 }
 
+/** Detecta si el navegador corre en Windows, para ofrecer el build de Windows en vez del APK por default. */
+export function isWindowsPlatform(): boolean {
+  if (typeof navigator === "undefined") return false;
+  return /Win/i.test(navigator.userAgent);
+}
+
 /** Format an ISO date (YYYY-MM-DD) into a localized readable string. */
 export function formatDate(iso: string, locale = "es-ES"): string {
   try {

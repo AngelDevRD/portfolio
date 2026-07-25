@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Download, ExternalLink, Github, Check, ListChecks, History, Cpu, Smartphone, MonitorDown, Apple } from "lucide-react";
+import { ArrowLeft, ExternalLink, Github, Check, ListChecks, History, Cpu, Smartphone, MonitorDown, Apple } from "lucide-react";
 import { getAllProjects, getProjectBySlug } from "@/data";
 import { TechPill } from "@/components/ui/tech-pill";
 import { Gallery } from "@/components/apps/gallery";
 import { ShareButton, ReportButton } from "@/components/apps/app-actions";
+import { SmartDownloadButton } from "@/components/apps/smart-download-button";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { formatBytes, formatCount, formatDate } from "@/lib/utils";
 import type { EnrichedProject } from "@/lib/github/types";
@@ -44,7 +45,6 @@ export default async function AppDetailPage({
   if (!app) notFound();
 
   const isMobile = app.type === "mobile";
-  const downloadUrl = isMobile ? `/api/projects/${app.slug}/download` : undefined;
 
   return (
     <div className="section pt-28 pb-16">
@@ -76,9 +76,7 @@ export default async function AppDetailPage({
         </div>
         <div className="flex shrink-0 flex-col gap-2">
           {isMobile ? (
-            <a href={downloadUrl} className="btn-primary">
-              <Download className="h-4 w-4" /> Descargar
-            </a>
+            <SmartDownloadButton slug={app.slug} hasWindows={Boolean(app.github?.windowsDownloadUrl)} />
           ) : (
             <a href={app.demoUrl} target="_blank" rel="noopener noreferrer" className="btn-primary">
               <ExternalLink className="h-4 w-4" /> Ver Demo

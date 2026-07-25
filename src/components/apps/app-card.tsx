@@ -4,11 +4,21 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Download, Info } from "lucide-react";
+import { useEffect, useRef } from "react";
 import type { MobileProject } from "@/lib/projects/schema";
 import type { EnrichedProject } from "@/lib/github/types";
-import { formatBytes, formatCount, formatDate } from "@/lib/utils";
+import { formatBytes, formatCount, formatDate, isWindowsPlatform } from "@/lib/utils";
 
 export function AppCard({ app }: { app: EnrichedProject<MobileProject> }) {
+  const hasWindows = Boolean(app.github?.windowsDownloadUrl);
+  const downloadRef = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    if (hasWindows && isWindowsPlatform() && downloadRef.current) {
+      downloadRef.current.href = `/api/projects/${app.slug}/download?platform=windows`;
+    }
+  }, [hasWindows, app.slug]);
+
   const downloadUrl = `/api/projects/${app.slug}/download`;
 
   return (
@@ -60,7 +70,7 @@ export function AppCard({ app }: { app: EnrichedProject<MobileProject> }) {
       </dl>
 
       <div className="mt-5 flex gap-2">
-        <a href={downloadUrl} className="btn-primary flex-1 !py-2 text-sm">
+        <a ref={downloadRef} href={downloadUrl} className="btn-primary flex-1 !py-2 text-sm">
           <Download className="h-4 w-4" /> Descargar
         </a>
         <Link href={`/apps/${app.slug}`} className="btn-secondary !py-2 text-sm">
