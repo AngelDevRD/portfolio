@@ -1,0 +1,170 @@
+[
+  {
+    "slug": "anivault",
+    "name": "AniVault",
+    "repo": "AngelDevRD/anivault",
+    "version": null,
+    "releaseDate": null,
+    "android": {
+      "apkUrl": null,
+      "apkSizeBytes": null,
+      "aabUrl": null,
+      "aabSizeBytes": null
+    },
+    "windows": {
+      "url": null,
+      "sizeBytes": null
+    },
+    "ios": {
+      "distribution": "not_available",
+      "testflightUrl": null
+    }
+  },
+  {
+    "slug": "finanzas360",
+    "name": "Finanzas360",
+    "repo": "AngelDevRD/finanzas360",
+    "version": null,
+    "releaseDate": null,
+    "android": {
+      "apkUrl": null,
+      "apkSizeBytes": null,
+      "aabUrl": null,
+      "aabSizeBytes": null
+    },
+    "windows": {
+      "url": null,
+      "sizeBytes": null
+    },
+    "ios": {
+      "distribution": "not_available",
+      "testflightUrl": null
+    }
+  },
+  {
+    "slug": "memory-cards",
+    "name": "Memory Cards",
+    "repo": "AngelDevRD/memory_cards",
+    "version": null,
+    "releaseDate": null,
+    "android": {
+      "apkUrl": null,
+      "apkSizeBytes": null,
+      "aabUrl": null,
+      "aabSizeBytes": null
+    },
+    "windows": {
+      "url": null,
+      "sizeBytes": null
+    },
+    "ios": {
+      "distribution": "not_available",
+      "testflightUrl": null
+    }
+  },
+  {
+    "slug": "mi-negocio",
+    "name": "MiTienda 360",
+    "repo": "AngelDevRD/mi-negocio",
+    "version": null,
+    "releaseDate": null,
+    "android": {
+      "apkUrl": null,
+      "apkSizeBytes": null,
+      "aabUrl": null,
+      "aabSizeBytes": null
+    },
+    "windows": {
+      "url": null,
+      "sizeBytes": null
+    },
+    "ios": {
+      "distribution": "not_available",
+      "testflightUrl": null
+    }
+  },
+  {
+    "slug": "nexfit",
+    "name": "NexFit",
+    "repo": "AngelDevRD/nexfit",
+    "version": null,
+    "releaseDate": null,
+    "android": {
+      "apkUrl": null,
+      "apkSizeBytes": null,
+      "aabUrl": null,
+      "aabSizeBytes": null
+    },
+    "windows": {
+      "url": null,
+      "sizeBytes": null
+    },
+    "ios": {
+      "distribution": "not_available",
+      "testflightUrl": null
+    }
+  },
+  {
+    "slug": "number-merge",
+    "name": "Number Merge",
+    "repo": "AngelDevRD/number_merge",
+    "version": null,
+    "releaseDate": null,
+    "android": {
+      "apkUrl": null,
+      "apkSizeBytes": null,
+      "aabUrl": null,
+      "aabSizeBytes": null
+    },
+    "windows": {
+      "url": null,
+      "sizeBytes": null
+    },
+    "ios": {
+      "distribution": "not_available",
+      "testflightUrl": null
+    }
+  },
+  {
+    "slug": "snake-evolution",
+    "name": "Snake Evolution",
+    "repo": "AngelDevRD/snake_evolution",
+    "version": null,
+    "releaseDate": null,
+    "android": {
+      "apkUrl": null,
+      "apkSizeBytes": null,
+      "aabUrl": null,
+      "aabSizeBytes": null
+    },
+    "windows": {
+      "url": null,
+      "sizeBytes": null
+    },
+    "ios": {
+      "distribution": "not_available",
+      "testflightUrl": null
+    }
+  },
+  {
+    "slug": "stack-tower",
+    "name": "Tower",
+    "repo": "AngelDevRD/stack_tower",
+    "version": null,
+    "releaseDate": null,
+    "android": {
+      "apkUrl": null,
+      "apkSizeBytes": null,
+      "aabUrl": null,
+      "aabSizeBytes": null
+    },
+    "windows": {
+      "url": null,
+      "sizeBytes": null
+    },
+    "ios": {
+      "distribution": "not_available",
+      "testflightUrl": null
+    }
+  }
+]
