@@ -82,13 +82,13 @@ export function AppExplorer({ apps }: { apps: App[] }) {
             </button>
           ))}
 
-          <div className="ml-auto flex items-center gap-2">
-            <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
+          <div className="flex w-full items-center gap-2 sm:ml-auto sm:w-auto">
+            <SlidersHorizontal className="h-4 w-4 shrink-0 text-muted-foreground" />
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as SortKey)}
               aria-label="Ordenar aplicaciones"
-              className="glass rounded-full px-3 py-1.5 text-sm outline-none ring-accent/50 focus:ring-2"
+              className="glass min-w-0 flex-1 rounded-full px-3 py-1.5 text-sm outline-none ring-accent/50 focus:ring-2 sm:flex-none"
             >
               <option value="recientes">Más recientes</option>
               <option value="estrellas">Más estrellas</option>
