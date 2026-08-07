@@ -25,7 +25,7 @@ export function AppCard({ app }: { app: EnrichedProject<MobileProject> }) {
     <motion.article
       whileHover={{ y: -6 }}
       transition={{ type: "spring", stiffness: 300, damping: 24 }}
-      className="card group flex h-full flex-col p-5 hover:border-accent/40 hover:shadow-2xl"
+      className="card group flex h-full w-full max-w-full flex-col overflow-hidden p-5 hover:border-accent/40 hover:shadow-2xl"
     >
       <div className="flex items-start gap-4">
         <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl shadow-md ring-1 ring-border">

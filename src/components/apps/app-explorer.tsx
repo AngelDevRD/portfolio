@@ -104,6 +104,7 @@ export function AppExplorer({ apps }: { apps: App[] }) {
             <motion.div
               key={a.slug}
               layout
+              className="min-w-0"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
