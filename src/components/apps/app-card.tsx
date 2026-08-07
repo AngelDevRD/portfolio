@@ -69,12 +69,12 @@ export function AppCard({ app }: { app: EnrichedProject<MobileProject> }) {
         </div>
       </dl>
 
-      <div className="mt-5 flex gap-2">
-        <a ref={downloadRef} href={downloadUrl} className="btn-primary flex-1 !py-2 text-sm">
-          <Download className="h-4 w-4" /> Descargar
+      <div className="mt-5 grid grid-cols-2 gap-2">
+        <a ref={downloadRef} href={downloadUrl} className="btn-primary !px-3 !py-2 text-sm">
+          <Download className="h-4 w-4 shrink-0" /> Descargar
         </a>
-        <Link href={`/apps/${app.slug}`} className="btn-secondary !py-2 text-sm">
-          <Info className="h-4 w-4" /> Más info
+        <Link href={`/apps/${app.slug}`} className="btn-secondary !px-3 !py-2 text-sm">
+          <Info className="h-4 w-4 shrink-0" /> Más info
         </Link>
       </div>
 
