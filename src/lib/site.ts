@@ -16,7 +16,7 @@ export const site = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   socials: {
     github: "https://github.com/AngelDevRD",
-    linkedin: "https://linkedin.com/in/tu-usuario",
+    linkedin: "https://www.linkedin.com/in/angel-genao-a49571415",
     email: "mailto:angeldnielgs@gmail.com",
   },
 } as const;
