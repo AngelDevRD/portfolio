@@ -4,6 +4,83 @@ Historial de cambios no triviales de este repositorio (portafolio). No es un cha
 producto para usuarios finales — es memoria de decisiones para sesiones futuras. Entradas
 más recientes primero.
 
+## 2026-09-08 — Pipeline de release de los 8 repos Flutter: CI desbloqueado, firma estable, versionado por tag (Fases 1-3 y 5; falta Fase 4)
+
+Trabajo hecho en los 8 repos externos (AngelDevRD/anivault, finanzas360, mi-negocio, nexfit,
+memory_cards, number_merge, snake_evolution, stack_tower), no en este repo — documentado acá
+porque el portafolio depende de que esos releases sean reales y consistentes. Contexto
+completo de la auditoría original (causas raíz, tabla por repo) no se repite aquí; ver
+historial de conversación de esta fecha si hace falta el detalle.
+
+- **Fase 1 — builds desbloqueados**: `flutter-version` fijado explícito en los 8 (antes
+  `channel: stable` sin pin rompía por drift de Flutter). nexfit: Gradle wrapper 8.12→8.14,
+  luego AGP 8.9.1→8.11.1 (dos gates de versión mínima distintos). anivault: conflicto de
+  `intl` (`0.20.2` fijo vs `flutter_localizations` que pedía `^0.20.3`) resuelto a `^0.20.3`.
+- **Fase 2 — firma estable**: keystore único para 6 apps (memory_cards, number_merge,
+  snake_evolution, stack_tower, nexfit, mi-negocio) en
+  `C:\Users\je416\keystores\portfolio-release.jks` (alias `portfolio`, huella SHA-256
+  `BF:E0:29:0D:45:64:00:24:D1:17:15:C8:C9:38:A5:8D:B7:F9:76:57:2C:31:B0:BD:9A:18:1A:9D:7F:6F:39:73`,
+  respaldo en `G:\Mi unidad\keystores-portfolio\`). **anivault y finanzas360 usan su propio
+  keystore distinto, deliberadamente no migrado** — tienen usuarios reales con esa firma
+  instalada; migrarlos rompería la actualización in-place. Antes, 5 de las 8 apps firmaban
+  con la clave debug (regenerada en cada runner de CI), por lo que Android rechazaba
+  actualizar una APK ya instalada.
+- **Fase 3 — trigger y versionado unificados**: los 8 migrados de `push` a rama (4 repos) /
+  trigger mixto a `on: push: tags: ["v*.*.*"]` uniforme. La versión de la APK
+  (`--build-name`/`--build-number`) se deriva del tag pusheado
+  (`--build-number=${{ github.run_number }}`); `pubspec.yaml` ya no es fuente de verdad de
+  versión para ningún gate de CI (sigue existiendo en el repo pero es cosmético). APK
+  renombrada a `<app>-android.apk` en los 8 (antes `app-release.apk` genérico; finanzas360
+  llegó a tener dos `.apk` distintas en el mismo release por este motivo). mi-negocio no
+  tenía workflow de Android — se creó (`release.yml`, consolidando lo que antes era solo
+  `release-windows.yml`).
+- **Fase 5 — probado end-to-end con un tag real en los 8** (no solo el YAML parseado): se
+  publicaron tags de prueba (`stack_tower v1.0.3`, `memory_cards/number_merge/snake_evolution
+  v1.0.3`, `anivault v1.2.1`, `finanzas360 v1.0.4`, `nexfit v1.1.5`, `mi-negocio v1.1.3→v1.1.4`)
+  y se verificó con `apksigner` que la huella del certificado del APK publicado coincide con
+  la esperada (la del keystore compartido, o la del keystore propio comparada contra el
+  release anterior en anivault/finanzas360). En `stack_tower` además se verificó el lado
+  portafolio completo: `/api/projects/stack-tower` devuelve `github.latestVersion` correcto,
+  `/api/projects/stack-tower/download` sirve el binario real (hash idéntico al del release,
+  no redirige), y la ficha `/apps/stack-tower` muestra la versión nueva.
+  - **mi-negocio necesitó dos fixes adicionales no anticipados** al probarlo por primera vez
+    en CI real (su workflow de Android nunca había corrido): AGP 8.9.1→8.11.1 (mismo gate que
+    nexfit) y luego Kotlin 2.2.0→2.2.20 (`org.jetbrains.kotlin.android` en
+    `android/settings.gradle.kts`) — Flutter exige mínimos de Gradle/AGP/Kotlin
+    independientes entre sí, cada uno se descubre solo al fallar.
+  - **Dato corregido durante esta sesión**: una sesión anterior había asumido que mi-negocio
+    nunca publicó una APK Android, y por eso descartó el riesgo de versionCode. Falso —
+    `v1.0.0` (+1), `v1.1.0` (+2) y `v1.1.1` (+3) sí tenían APK real; solo `v1.1.2` salió sin
+    ella. El `run_number` del workflow "Release" de mi-negocio, además, **no se reseteó** al
+    recrear el archivo `release.yml` en la Fase 3 — GitHub Actions le reasignó el mismo
+    workflow-id que tenía un `release.yml` viejo (de julio, ya borrado) en esa misma ruta, y
+    continuó su contador (`run_number` venía en 3). Margen real sobre el último versionCode
+    instalado: exactamente 1, no "holgado". Verificar con `gh` antes de asumir holgura en
+    cualquier repo donde un workflow haya sido borrado y recreado en la misma ruta.
+
+### Pendiente — Fase 4 (limpieza del portafolio, no depende de nada más)
+
+No arrancada. Vive en este repo (`protafolioweb`), no en los repos Flutter:
+
+- Borrar los `codemagic.yaml` residuales en anivault, finanzas360 y mi-negocio (código
+  muerto, ningún build real los usa) y los comentarios muertos a Codemagic en
+  `src/app/api/orchestrator/webhook/route.ts` (docstring), `src/lib/orchestrator/github-content.ts`
+  y `src/lib/github/types.ts`.
+- `src/lib/github/enrichment.ts`: al elegir `releases[0]` filtrar `prerelease` (hoy un
+  prerelease se serviría como si fuera la versión estable). Desambiguar cuando un release
+  tiene varios `.apk` — hoy `.find(a => a.name.endsWith(".apk"))` toma el primero que
+  encuentre; releases viejos de finanzas360 (anteriores a la Fase 3) todavía tienen dos
+  `.apk` con digests distintos en el mismo release.
+- Quitar `downloadAssetUrl`/`downloadUrl` de la respuesta pública de `/api/projects` y
+  `/api/projects/[slug]` (hoy se filtran esos campos en la ficha pero se exponen en el
+  listado — confirmar alcance exacto al retomar).
+- Corregir la documentación que dice que los repos del catálogo son privados: los 8 son
+  públicos (confirmado con `gh` varias veces en esta sesión).
+- El `GITHUB_TOKEN` de `.env.local` estuvo vencido durante gran parte de esta sesión; se
+  regeneró (fine-grained, "Public repositories" read-only) y quedó funcionando — no debería
+  hacer falta tocarlo de nuevo, pero si vuelve a dar 401/"Bad credentials", regenerar desde
+  GitHub → Settings → Developer settings → Personal access tokens.
+
 ## 2026-07-11 — Documentación, catálogo, iconos, descargas y updater
 
 - **Documentación**: creada la carpeta `docs/` completa (este documento y sus hermanos).
