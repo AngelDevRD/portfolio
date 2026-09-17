@@ -4,6 +4,28 @@ Historial de cambios no triviales de este repositorio (portafolio). No es un cha
 producto para usuarios finales — es memoria de decisiones para sesiones futuras. Entradas
 más recientes primero.
 
+## 2026-09-17 (tarde) — softprops/action-gh-release se rompió con Node 24: publicación migrada a `gh`
+
+Al publicar `number_merge v1.0.4` (primer release real tras el cambio de la mañana), el job
+`release` falló 3 veces seguidas: `softprops/action-gh-release@v2` aborta la subida de la APK
+(~50 MB) a los ~28 s con `Headers Timeout Error` — los runners ya fuerzan Node 24 y el
+`undici` de la acción corta por headers-timeout. Deja el release **en draft y sin assets**
+(además borra el asset previo antes de resubir: el `.zip` de Windows se perdió en el camino).
+
+- **Que el portafolio siga sirviendo la versión anterior mientras eso pasa no fue casualidad**:
+  `enrichment.ts` ignora drafts y exige que el release tenga APK. Ningún usuario vio un enlace roto.
+- **Arreglo (los 8 repos):** el paso de publicar usa ahora `gh release create --draft` +
+  `gh release upload --clobber` (3 intentos, 15 s entre ellos) + `gh release edit --draft=false`
+  al final. `gh` es Go, no pasa por Node. El release solo se publica **después** de subir los
+  assets, así que un fallo a mitad deja un draft que el portafolio ignora, nunca una versión
+  a medias. En anivault solo el workflow de Android hace el `--draft=false` (el de Windows
+  puede terminar antes y no debe publicar un release sin APK).
+- **`tools/verify-release-version.mjs` (los 8 repos):** leía `releases?per_page=1`, que incluye
+  drafts, y un draft fallido del mismo tag bloqueaba el reintento ("v1.0.4 no es superior a
+  v1.0.4"). Ahora filtra draft/prerelease.
+- Verificado: `number_merge v1.0.4` publicada con APK + zip, servida por prod con el digest
+  nuevo; las 8 apps coinciden versión y tamaño entre GitHub Releases y Vercel.
+
 ## 2026-09-17 — Release automático al pushear + portafolio sin caché (cierra Fase 4)
 
 - **Problema:** los workflows de los 8 repos Flutter solo corrían con tags `v*.*.*`; un
