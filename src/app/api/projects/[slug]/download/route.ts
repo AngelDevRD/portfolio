@@ -33,7 +33,9 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
 
   const asset = await getApkStorageProvider().getApk(project, kind);
   if (!asset) {
-    return NextResponse.redirect(`https://github.com/${project.repo}/releases`);
+    return NextResponse.redirect(`https://github.com/${project.repo}/releases`, {
+      headers: { "Cache-Control": "no-store, max-age=0" },
+    });
   }
 
   await incrementDownloadCount(project.slug);
@@ -42,6 +44,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
     headers: {
       "Content-Type": CONTENT_TYPE_BY_KIND[kind],
       "Content-Disposition": `attachment; filename="${apkFilename(project, kind)}"`,
+      "Cache-Control": "no-store, max-age=0",
       ...(asset.contentLength ? { "Content-Length": String(asset.contentLength) } : {}),
     },
   });

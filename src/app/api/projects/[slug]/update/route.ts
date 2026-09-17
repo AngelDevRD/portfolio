@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getProjectRepository } from "@/lib/projects/factory";
 import { site } from "@/lib/site";
 
-export const revalidate = 1800;
+export const dynamic = "force-dynamic";
 
 /**
  * Endpoint de auto-actualizacion para las apps Flutter distribuidas fuera de Google Play.
@@ -39,13 +39,16 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
 
   const base = site.url.replace(/\/$/, "");
 
-  return NextResponse.json({
-    version,
-    minSupportedVersion: project.minSupportedVersion ?? null,
-    apk_url: `${base}/api/projects/${project.slug}/download`,
-    apk_size_bytes: project.github?.apkSizeBytes ?? null,
-    apk_sha256: project.github?.apkSha256 ?? null,
-    changes,
-    releaseDate: project.github?.releaseDate ?? null,
-  });
+  return NextResponse.json(
+    {
+      version,
+      minSupportedVersion: project.minSupportedVersion ?? null,
+      apk_url: `${base}/api/projects/${project.slug}/download`,
+      apk_size_bytes: project.github?.apkSizeBytes ?? null,
+      apk_sha256: project.github?.apkSha256 ?? null,
+      changes,
+      releaseDate: project.github?.releaseDate ?? null,
+    },
+    { headers: { "Cache-Control": "no-store, max-age=0" } }
+  );
 }

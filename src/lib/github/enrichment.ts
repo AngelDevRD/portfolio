@@ -13,6 +13,8 @@ interface GhRelease {
   tag_name: string;
   published_at: string;
   body: string | null;
+  draft: boolean;
+  prerelease: boolean;
   assets: {
     name: string;
     size: number;
@@ -81,12 +83,18 @@ export async function getGithubEnrichment(
     starsCount: repoInfo.stargazers_count,
   };
 
-  if (type === "mobile" && Array.isArray(releases) && releases.length > 0) {
-    const [latest] = releases;
-    const findApk = (r: GhRelease) => r.assets?.find((a) => a.name.endsWith(".apk"));
+  const stableReleases = Array.isArray(releases) ? releases.filter((r) => !r.draft && !r.prerelease) : [];
+
+  if (type === "mobile" && stableReleases.length > 0) {
+    const findApk = (r: GhRelease) =>
+      r.assets?.find((a) => a.name.endsWith("-android.apk")) ?? r.assets?.find((a) => a.name.endsWith(".apk"));
     const findAab = (r: GhRelease) => r.assets?.find((a) => a.name.endsWith(".aab"));
     const findWindows = (r: GhRelease) =>
       r.assets?.find((a) => a.name.endsWith("-windows.zip") || a.name.endsWith(".exe"));
+    // El job de Windows a veces publica el release unos minutos antes que el de Android
+    // (o viceversa): preferir el release estable mas reciente que YA tenga APK evita que
+    // download/update sirvan una version anterior mientras el asset todavia no llega.
+    const latest = stableReleases.find((r) => findApk(r)) ?? stableReleases[0];
     const latestApk = findApk(latest);
     const latestAab = findAab(latest);
     const latestWindows = findWindows(latest);
@@ -105,7 +113,7 @@ export async function getGithubEnrichment(
     enrichment.windowsDownloadUrl = latestWindows?.browser_download_url;
     enrichment.windowsAssetUrl = latestWindows?.url;
     enrichment.windowsFilename = latestWindows?.name;
-    enrichment.releaseHistory = releases.slice(0, 10).map((r): ReleaseHistoryEntry => {
+    enrichment.releaseHistory = stableReleases.slice(0, 10).map((r): ReleaseHistoryEntry => {
       const apk = findApk(r);
       return {
         version: r.tag_name,
