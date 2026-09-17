@@ -3,13 +3,25 @@
 ## Regla oficial
 
 1. Nunca publicar dos GitHub Releases con el mismo número de versión (tag).
-2. Toda APK nueva debe incrementar `versionName` en el `pubspec.yaml` / `build.gradle` del
-   repo Flutter correspondiente.
-3. Toda APK nueva debe incrementar `versionCode` (Android) o el build number de
-   `pubspec.yaml` (`version: X.Y.Z+build`).
+2. `versionName` de la APK = tag del release sin la `v` (`--build-name`), lo inyecta el CI.
+   `pubspec.yaml` **no** es fuente de verdad de versión (su `version:` es cosmético).
+3. `versionCode` de la APK = `github.run_number` del workflow de release (`--build-number`),
+   creciente por construcción. No borrar ni recrear el workflow en otra ruta sin revisar el
+   contador (ver CHANGELOG 2026-09-08, caso mi-negocio).
 4. La versión nueva debe ser **estrictamente mayor** (semver: major.minor.patch) que la
    última ya publicada. Si no lo es, el proceso de release debe **fallar automáticamente**,
    no publicarse "con una advertencia".
+
+## Cómo se publica una versión (estado actual, los 8 repos Flutter)
+
+- **Automático (lo normal):** `git push` a la rama por defecto (`master`; `main` en anivault)
+  con cambios en `lib/`, `android/`, `assets/`, `windows/` o `pubspec.*`. El job `version`
+  del workflow toma el último release publicado y suma 1 al patch (`v1.0.3` → `v1.0.4`),
+  compila, firma y publica el release con ese tag. Pushes que solo tocan docs/CI no publican.
+- **Saltar un push:** incluir `[skip release]` en el mensaje del commit.
+- **Versión explícita (minor/major):** `git tag v2.0.0 && git push origin v2.0.0`.
+- Ningún paso toca este repo ni requiere redeploy de Vercel: el portafolio lee el release en
+  vivo (ver [UPDATE_SYSTEM.md](./UPDATE_SYSTEM.md)).
 
 ## Por qué la fuente de verdad es el tag del release, no un campo aparte
 

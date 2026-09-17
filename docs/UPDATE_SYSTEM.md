@@ -13,7 +13,7 @@ App Flutter instalada
    │  1. GET /api/projects/<slug>/update
    ▼
 Portfolio (Next.js)
-   │  lee en vivo el ultimo GitHub Release del repo (cache 30 min)
+   │  lee en vivo el ultimo GitHub Release estable con APK (sin cache)
    ▼
 Respuesta JSON con version, tamaño, checksum, changelog y URL de descarga
    │
@@ -82,12 +82,19 @@ esperado:
    adicional de este repo para esto, es comportamiento nativo de Android siempre que el
    `packageId`/firma no cambien entre versiones.
 
+## Cómo llega una versión nueva a los usuarios
+
+`git push` a la rama por defecto de la app (con cambios de código) → GitHub Actions calcula
+el tag siguiente, compila, firma y publica el Release → este endpoint y `/download` la sirven
+en la siguiente petición, sin redeploy de Vercel. `/update` y `/download` responden con
+`Cache-Control: no-store`. Mientras un release todavía no tiene `.apk` (p. ej. anivault publica
+Windows y Android desde workflows separados), se sigue sirviendo el release anterior que sí
+la tiene. Detalle de versionado en [VERSIONING.md](./VERSIONING.md).
+
 ## Qué falta por repo Flutter (fuera de este workspace)
 
 - Implementar los pasos 1–8 anteriores como un servicio/paquete reutilizable (podría
   compartirse entre los 7 repos Flutter como un paquete Dart interno).
-- Integrar `tools/verify-release-version.mjs` (o su lógica) en el CI de cada repo antes de
-  publicar un release — ver [VERSIONING.md](./VERSIONING.md).
 - Configurar `minSupportedVersion` en el JSON del proyecto correspondiente
   (`content/projects/mobile/<slug>.json`, en este repo) cuando se necesite forzar una
   actualización obligatoria.

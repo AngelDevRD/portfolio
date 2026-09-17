@@ -8,8 +8,8 @@
  *   - METADATA_GH_TOKEN: Contents:Read-only, scope solo a los repos Flutter. Se usa nada mas
  *     para leer pubspec.yaml/README/manifest/etc. -- nunca escribe nada.
  *   - PORTFOLIO_GH_TOKEN: Contents:Read-and-write, scope solo a protafolioweb. Es el unico que
- *     puede comitear. Un tercer token (RELEASE_GH_TOKEN) vive solo en Codemagic y nunca llega
- *     a este repo -- ver codemagic.yaml de cada app.
+ *     puede comitear. Los releases los publica el GITHUB_TOKEN propio del workflow de cada app,
+ *     que nunca llega a este repo.
  */
 import { withRetry } from "./retry";
 

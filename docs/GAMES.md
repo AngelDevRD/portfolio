@@ -6,7 +6,7 @@ Todos distribuidos fuera de Google Play, mismo mecanismo que las apps (ver
 ## Snake Evolution
 
 - **Slug:** `snake-evolution` · **Package ID:** `com.portfolio.snakeevolution.snake_evolution`
-- **Repo:** [AngelDevRD/snake_evolution](https://github.com/AngelDevRD/snake_evolution) (privado)
+- **Repo:** [AngelDevRD/snake_evolution](https://github.com/AngelDevRD/snake_evolution) (público)
 - **Categoría:** Arcade
 - **Última versión publicada:** v1.0.1 (2026-07-11)
 - **Icono:** `public/apps/snake-evolution/icon.png`
@@ -15,7 +15,7 @@ Todos distribuidos fuera de Google Play, mismo mecanismo que las apps (ver
 ## Number Merge
 
 - **Slug:** `number-merge` · **Package ID:** `com.portfolio.numbermerge.number_merge`
-- **Repo:** [AngelDevRD/number_merge](https://github.com/AngelDevRD/number_merge) (privado)
+- **Repo:** [AngelDevRD/number_merge](https://github.com/AngelDevRD/number_merge) (público)
 - **Categoría:** Puzzle
 - **Última versión publicada:** v1.0.1 (2026-07-11)
 - **Icono:** `public/apps/number-merge/icon.png`
@@ -24,7 +24,7 @@ Todos distribuidos fuera de Google Play, mismo mecanismo que las apps (ver
 ## Memory Cards
 
 - **Slug:** `memory-cards` · **Package ID:** `com.portfolio.memorycards.memory_cards`
-- **Repo:** [AngelDevRD/memory_cards](https://github.com/AngelDevRD/memory_cards) (privado)
+- **Repo:** [AngelDevRD/memory_cards](https://github.com/AngelDevRD/memory_cards) (público)
 - **Categoría:** Puzzle
 - **Última versión publicada:** v1.0.1 (2026-07-11)
 - **Icono:** `public/apps/memory-cards/icon.png`
@@ -33,7 +33,7 @@ Todos distribuidos fuera de Google Play, mismo mecanismo que las apps (ver
 ## Tower
 
 - **Slug:** `stack-tower` · **Package ID:** `com.portfolio.stacktower.stack_tower`
-- **Repo:** [AngelDevRD/stack_tower](https://github.com/AngelDevRD/stack_tower) (privado)
+- **Repo:** [AngelDevRD/stack_tower](https://github.com/AngelDevRD/stack_tower) (público)
 - **Categoría:** Arcade
 - **Última versión publicada:** v1.0.1 (2026-07-11)
 - **Icono:** `public/apps/stack-tower/icon.png`

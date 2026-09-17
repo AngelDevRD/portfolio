@@ -20,7 +20,7 @@ para producción.
 | `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Cliente público de Supabase (contador de descargas, lectura) | No — el contador degrada a 0 si falta |
 | `SUPABASE_SERVICE_ROLE_KEY` | Cliente admin de Supabase (insertar sugerencias) — **solo servidor** | No — la tabla de sugerencias no se llena si falta |
 | `ADMIN_PASSWORD` | Contraseña única del panel `/admin` | Sí para usar el panel (500 si falta y se intenta login) |
-| `GITHUB_TOKEN` | Autenticación contra la API de GitHub (repos privados, evita rate-limit anónimo) | Recomendada — sin ella, los repos privados del catálogo (la mayoría) no se enriquecen ni permiten descarga |
+| `GITHUB_TOKEN` | Autenticación contra la API de GitHub (evita el rate-limit anónimo de 60 req/h; los 8 repos Flutter son públicos, gymflow y nexora-crm son privados) | Recomendada — sin ella, con poco tráfico ya se agota el límite anónimo y las apps dejan de mostrar versión y descarga |
 | `PROJECTS_REPOSITORY_DRIVER` | Selecciona la implementación de `ProjectRepository` (`src/lib/projects/factory.ts`) | No, default `"json"` |
 | `APK_STORAGE_DRIVER` | Selecciona la implementación de `ApkStorageProvider` (`src/lib/storage/factory.ts`) | No, default `"github"` |
 

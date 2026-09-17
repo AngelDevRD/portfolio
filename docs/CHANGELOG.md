@@ -4,6 +4,29 @@ Historial de cambios no triviales de este repositorio (portafolio). No es un cha
 producto para usuarios finales — es memoria de decisiones para sesiones futuras. Entradas
 más recientes primero.
 
+## 2026-09-17 — Release automático al pushear + portafolio sin caché (cierra Fase 4)
+
+- **Problema:** los workflows de los 8 repos Flutter solo corrían con tags `v*.*.*`; un
+  `git push` normal no publicaba APK y el portafolio seguía sirviendo la versión anterior.
+- **Repos Flutter:** `release.yml` (anivault: `release-android.yml` + `release-windows.yml`)
+  ahora también corre en push a la rama por defecto filtrado por paths
+  (`lib/ android/ assets/ windows/ pubspec.*`), con `concurrency` y un job `version` que
+  calcula `último release + 1 patch` (o usa el tag si el push es un tag). `[skip release]` lo
+  omite. La acción de release crea el tag (`tag_name` + `target_commitish`); al hacerlo con
+  `GITHUB_TOKEN` no redispara el workflow. anivault: el workflow de Windows verifica la
+  versión antes de compilar y reintenta la publicación (carrera con el de Android).
+  Probado end-to-end en stack_tower (push sin tag → `v1.0.4` → servido por prod).
+- **Portafolio:** `enrichment.ts` ignora draft/prerelease, elige el release estable más
+  reciente **que tenga APK** y prefiere `*-android.apk`; `/download` y `/update` con
+  `Cache-Control: no-store` y `/update` pasó de `revalidate=1800` a `force-dynamic`.
+  `npm run lint` usa `eslint .` (Next 16 quitó `next lint`) y se sincronizó `package-lock.json`.
+- **Fase 4:** corregidos los comentarios a Codemagic en el portafolio y las docs (repos
+  Flutter públicos). Los `codemagic.yaml` de anivault, finanzas360 y mi-negocio **se
+  conservan a propósito**: son la única definición de build de iOS (`ios-workflow`) de esas
+  apps; no corren en ningún CI y no interfieren con GitHub Actions. **No** se quitaron
+  `downloadAssetUrl`/`downloadUrl` de `/api/projects`: son URLs públicas de repos públicos
+  (no exponen nada sensible) y `apps/[slug]` y `metadata-file.ts` los usan.
+
 ## 2026-09-08 — Pipeline de release de los 8 repos Flutter: CI desbloqueado, firma estable, versionado por tag (Fases 1-3 y 5; falta Fase 4)
 
 Trabajo hecho en los 8 repos externos (AngelDevRD/anivault, finanzas360, mi-negocio, nexfit,
@@ -60,7 +83,7 @@ historial de conversación de esta fecha si hace falta el detalle.
 
 ### Pendiente — Fase 4 (limpieza del portafolio, no depende de nada más)
 
-No arrancada. Vive en este repo (`protafolioweb`), no en los repos Flutter:
+**Resuelta el 2026-09-17** (ver entrada de esa fecha). Texto original:
 
 - Borrar los `codemagic.yaml` residuales en anivault, finanzas360 y mi-negocio (código
   muerto, ningún build real los usa) y los comentarios muertos a Codemagic en

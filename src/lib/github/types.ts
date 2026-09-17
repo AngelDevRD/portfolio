@@ -27,7 +27,7 @@ export interface GithubEnrichment {
   downloadAssetUrl?: string;
   releaseHistory?: ReleaseHistoryEntry[];
   // AAB (Google Play) y Windows: mismo release, asset distinto por nombre de archivo
-  // (ver convención "<slug>-android.aab" / "<slug>-windows.zip" en codemagic.yaml de cada app).
+  // (convención "<slug>-android.aab" / "<slug>-windows.zip" del workflow de release de cada app).
   aabSizeBytes?: number;
   aabDownloadUrl?: string;
   aabAssetUrl?: string;

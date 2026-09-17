@@ -10,11 +10,10 @@ import { logOrchestratorEvent } from "@/lib/orchestrator/log";
 export const runtime = "nodejs";
 
 /**
- * Webhook que dispara el ultimo paso de cada workflow de Codemagic (script "Notificar al
- * portafolio", ver codemagic.yaml de cada app). Reemplaza el cron del diseno anterior: el
- * asset ya fue subido al GitHub Release por el propio script de Codemagic (que corre en la
- * maquina de build, con el archivo ya local -- no hace falta que este webhook descargue nada
- * de Codemagic). Este endpoint solo:
+ * Webhook opcional para el paso final del CI de cada app (hoy los workflows de GitHub Actions
+ * NO lo llaman: la descarga y la version ya funcionan sin el, porque el portafolio lee los
+ * GitHub Releases en vivo). Sirve para refrescar el catalogo y public/metadata.json tras un
+ * release; el asset ya fue subido al Release por el CI. Este endpoint solo:
  *   1. Auto-extrae metadatos del repo (pubspec/README/manifest/Info.plist/assets) y actualiza
  *      el JSON del catalogo -- nunca requiere editar un JSON a mano.
  *   2. Regenera public/metadata.json en vivo desde GitHub Releases (misma fuente que ya usa la
@@ -23,7 +22,7 @@ export const runtime = "nodejs";
  * Comitea via la Contents API de GitHub (no hay working tree de git en una funcion serverless)
  * y solo si el contenido realmente cambio, para no generar commits vacios en cada llamada.
  *
- * URL configurada una vez por app en su codemagic.yaml:
+ * URL a llamar (POST) desde el CI de la app si se quiere usar:
  *   https://<dominio>/api/orchestrator/webhook?owner=AngelDevRD&repo=nexfit&secret=$WEBHOOK_SECRET
  * Body esperado: {"workflowId": "android-workflow" | "windows-workflow" | "ios-workflow", "buildStatus": "success"}
  */
@@ -88,7 +87,7 @@ export async function POST(req: Request) {
       await withRetry(() => putPortfolioFile("public/metadata.json", nextMetadataJson, "chore: actualizar metadata.json (webhook)"));
     }
 
-    // Verifica el enlace que este workflow acaba de publicar (el asset ya lo subio Codemagic al
+    // Verifica el enlace que este workflow acaba de publicar (el asset ya lo subio el CI al
     // Release; aqui solo confirmamos que el proxy de descarga del portafolio lo sirve bien).
     const asset = snapshot.find((e) => e.slug === slug);
     const checkUrl =
