@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { contactSchema } from "@/lib/validations";
 import { sendMail, esc } from "@/lib/mail";
+import { site } from "@/lib/site";
 
 export async function POST(req: Request) {
   let body: unknown;
@@ -36,7 +37,13 @@ export async function POST(req: Request) {
   });
 
   if (!result.ok) {
-    return NextResponse.json({ error: result.error || "No se pudo enviar" }, { status: 502 });
+    // El detalle (qué variable falta, qué dijo Resend) es información de
+    // servidor: al visitante se le da algo accionable, no el error técnico.
+    console.error("[contact] no se pudo enviar el mensaje:", result.error);
+    return NextResponse.json(
+      { error: `No pudimos enviar tu mensaje. Escribime directo a ${site.email}.` },
+      { status: 502 }
+    );
   }
 
   return NextResponse.json({ ok: true, skipped: result.skipped ?? false });

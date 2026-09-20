@@ -21,6 +21,7 @@ export async function POST(req: Request) {
 
   // 1) Guardar en Supabase (si está configurado)
   const supabase = getSupabaseAdmin();
+  let persisted = false;
   if (supabase) {
     const { error } = await supabase.from("suggestions").insert({
       name: d.name || null,
@@ -32,7 +33,11 @@ export async function POST(req: Request) {
       problem: d.problem || null,
       category: d.category,
     });
-    if (error) console.error("[suggestions] Supabase:", error.message);
+    if (error) {
+      console.error("[suggestions] Supabase:", error.message);
+    } else {
+      persisted = true;
+    }
   }
 
   // 2) Notificar por correo (si está configurado)
@@ -55,8 +60,22 @@ export async function POST(req: Request) {
     `,
   });
 
-  if (!mail.ok && !supabase) {
-    return NextResponse.json({ error: mail.error || "No se pudo procesar" }, { status: 502 });
+  // La condición anterior era `!mail.ok && !supabase`: si Supabase estaba
+  // configurado pero el insert fallaba, o si el correo se "saltaba" por falta
+  // de clave, la respuesta era `ok` y la sugerencia se perdía sin rastro. Lo
+  // que importa es si quedó guardada en algún lado, no si los servicios están
+  // declarados.
+  const delivered = persisted || (mail.ok && !mail.skipped);
+  if (!delivered) {
+    console.error(
+      "[suggestions] no se pudo guardar ni notificar:",
+      mail.error ?? "sin proveedor de correo",
+      persisted ? "" : "-- tampoco se persistió en Supabase"
+    );
+    return NextResponse.json(
+      { error: "No pudimos registrar tu sugerencia. Intentá de nuevo en un rato." },
+      { status: 502 }
+    );
   }
 
   return NextResponse.json({ ok: true });

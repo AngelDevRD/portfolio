@@ -4,13 +4,17 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
-import { Send, CheckCircle2, Loader2 } from "lucide-react";
+import { Send, CheckCircle2, Loader2, AlertTriangle } from "lucide-react";
 import { contactSchema, type ContactInput } from "@/lib/validations";
+import { site } from "@/lib/site";
 import { Field, inputClass } from "./field";
 
 export function ContactForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [serverError, setServerError] = useState<string>("");
+  // El backend responde `skipped: true` cuando no hay proveedor de correo
+  // configurado. Antes se ignoraba y se mostraba "¡Mensaje enviado!" igual.
+  const [skipped, setSkipped] = useState(false);
 
   const {
     register,
@@ -28,10 +32,11 @@ export function ContactForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
+      const json = await res.json().catch(() => ({}));
       if (!res.ok) {
-        const j = await res.json().catch(() => ({}));
-        throw new Error(j.error || "No se pudo enviar el mensaje");
+        throw new Error(json.error || "No se pudo enviar el mensaje");
       }
+      setSkipped(json.skipped === true);
       setStatus("success");
       reset();
     } catch (err) {
@@ -46,10 +51,29 @@ export function ContactForm() {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         className="card flex flex-col items-center gap-3 p-10 text-center"
+        role="status"
+        aria-live="polite"
       >
-        <CheckCircle2 className="h-14 w-14 text-emerald-500" />
-        <h3 className="text-xl font-semibold">¡Mensaje enviado!</h3>
-        <p className="text-muted-foreground">Gracias por escribir. Te responderé lo antes posible.</p>
+        {skipped ? (
+          <>
+            <AlertTriangle className="h-14 w-14 text-amber-500" />
+            <h3 className="text-xl font-semibold">Mensaje no entregado</h3>
+            <p className="text-muted-foreground">
+              El envío de correo no está configurado en este entorno, así que tu mensaje
+              no llegó. Escribime directo a{" "}
+              <a className="underline" href={`mailto:${site.email}`}>
+                {site.email}
+              </a>
+              .
+            </p>
+          </>
+        ) : (
+          <>
+            <CheckCircle2 className="h-14 w-14 text-emerald-500" />
+            <h3 className="text-xl font-semibold">¡Mensaje enviado!</h3>
+            <p className="text-muted-foreground">Gracias por escribir. Te responderé lo antes posible.</p>
+          </>
+        )}
         <button type="button" onClick={() => setStatus("idle")} className="btn-secondary mt-2">
           Enviar otro
         </button>
@@ -79,7 +103,11 @@ export function ContactForm() {
         <textarea id="c-message" rows={5} className={inputClass(!!errors.message)} placeholder="Cuéntame sobre tu proyecto o idea…" {...register("message")} />
       </Field>
 
-      {status === "error" && <p className="text-sm text-red-500">{serverError}</p>}
+      {status === "error" && (
+        <p className="text-sm text-red-500" role="alert">
+          {serverError}
+        </p>
+      )}
 
       <button type="submit" disabled={status === "loading"} className="btn-primary w-full">
         {status === "loading" ? (

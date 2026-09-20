@@ -11,7 +11,7 @@ esta tabla cada vez que se agregue o retire un proyecto del catálogo.
 | Nombre | Slug | Estado | Tecnologías | Package ID | Repo | Última versión | Icono | Ruta |
 |---|---|---|---|---|---|---|---|---|
 | Finanzas360 | `finanzas360` | development | Flutter, Android | `com.angeldevrd.finanzas360` | [AngelDevRD/finanzas360](https://github.com/AngelDevRD/finanzas360) | v1.0.3 | `/apps/finanzas360/icon.png` | `/apps/finanzas360` |
-| MiTienda 360 | `mi-negocio` | development | Flutter, Android, Offline-first | `com.angeldevrd.appgestion` | [AngelDevRD/mi-negocio](https://github.com/AngelDevRD/mi-negocio) | v1.1.1 | `/apps/mi-negocio/icon.png` | `/apps/mi-negocio` |
+| MiTienda 360 | `mitienda360` | beta | Flutter, Android, Offline-first | `com.angeldevrd.appgestion` | [AngelDevRD/mitienda360](https://github.com/AngelDevRD/mitienda360) | v1.1.21 | `/apps/mitienda360/icon.png` | `/apps/mitienda360` |
 | NexFit | `nexfit` | development | Flutter, Android | `com.angeldevrd.nexfit` | [AngelDevRD/nexfit](https://github.com/AngelDevRD/nexfit) | v1.0.1 | `/apps/nexfit/icon.png` | `/apps/nexfit` |
 
 Detalle completo en [APPS.md](./APPS.md).

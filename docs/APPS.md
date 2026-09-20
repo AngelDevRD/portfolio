@@ -18,16 +18,16 @@ Apps Flutter de utilidad general, distribuidas **fuera de Google Play** vía Git
 
 ## MiTienda 360
 
-- **Slug:** `mi-negocio` · **Package ID:** `com.angeldevrd.appgestion`
-- **Repo:** [AngelDevRD/mi-negocio](https://github.com/AngelDevRD/mi-negocio) (público)
+- **Slug:** `mitienda360` · **Package ID:** `com.angeldevrd.appgestion`
+- **Repo:** [AngelDevRD/mitienda360](https://github.com/AngelDevRD/mitienda360) (público)
 - **Categoría:** Negocios · **Tags:** Flutter, Android, Offline-first
-- **Última versión publicada:** v1.1.1 (2026-07-11)
-- **Icono:** `public/apps/mi-negocio/icon.png`
+- **Última versión publicada:** v1.1.21 (2026-09-19) · MVP completo
+- **Icono:** `public/apps/mitienda360/icon.png`
 - **Icono instalado (Android):** corregido el 2026-07-11 — el adaptive icon dejaba un anillo
   del color de fondo visible (el `inset="16%"` del XML encogía el foreground otra vez pese a
   que ya llenaba su propio canvas). Ver [CHANGELOG.md](./CHANGELOG.md).
-- **Descripción:** gestión de embutidoras, colmados y pequeños negocios alimenticios,
-  pensada para funcionar sin conexión.
+- **Descripción:** gestión para colmados y pequeños negocios de barrio: ventas, fiado, caja,
+  inventario, compras, gastos y análisis. Funciona sin conexión y sincroniza después.
 
 ## NexFit
 

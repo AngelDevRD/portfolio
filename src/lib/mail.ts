@@ -1,9 +1,13 @@
 import { Resend } from "resend";
 
 /**
- * Envía un correo con Resend. Si no hay RESEND_API_KEY configurada,
- * registra en consola y devuelve { skipped: true } para no romper la app
- * en desarrollo. Configura las claves en .env.local para envíos reales.
+ * Envía un correo con Resend.
+ *
+ * Sin RESEND_API_KEY/CONTACT_TO_EMAIL no hay envío posible. En desarrollo eso
+ * se reporta como `skipped` y no rompe el flujo; en producción se reporta como
+ * fallo. Devolver `ok: true` en producción sin haber enviado nada hacía que el
+ * formulario mostrara "¡Mensaje enviado!" y el mensaje del visitante se
+ * perdiera sin que nadie se enterara.
  */
 export async function sendMail(opts: {
   subject: string;
@@ -15,7 +19,12 @@ export async function sendMail(opts: {
   const from = process.env.CONTACT_FROM_EMAIL || "onboarding@resend.dev";
 
   if (!apiKey || !to) {
-    console.warn("[mail] RESEND_API_KEY/CONTACT_TO_EMAIL no configurados. Correo NO enviado:", opts.subject);
+    const detail = "RESEND_API_KEY/CONTACT_TO_EMAIL no configurados";
+    if (process.env.NODE_ENV === "production") {
+      console.error("[mail]", detail, "-- correo NO enviado:", opts.subject);
+      return { ok: false, skipped: true, error: detail };
+    }
+    console.warn("[mail]", detail, "-- correo NO enviado:", opts.subject);
     return { ok: true, skipped: true };
   }
 

@@ -1,0 +1,36 @@
+{
+  "slug": "mitienda360",
+  "type": "mobile",
+  "name": "MiTienda 360",
+  "tagline": "El colmado completo, aunque se caiga el internet",
+  "description": "Gestión para colmados y pequeños negocios de barrio: ventas rápidas, fiado con cuenta por cliente, caja con arqueo por método de pago, inventario, compras, gastos y análisis del negocio. Todo funciona sin conexión y se sincroniza cuando vuelve el internet.",
+  "tags": ["Flutter", "Android", "Windows", "Offline-first", "SQLite", "Supabase"],
+  "category": "Negocios",
+  "status": "beta",
+  "featured": true,
+  "logo": "/apps/mitienda360/icon.png",
+  "screenshots": [
+    "/apps/mitienda360/01-inicio.png",
+    "/apps/mitienda360/02-venta.png",
+    "/apps/mitienda360/03-cobro.png",
+    "/apps/mitienda360/04-fiado.png",
+    "/apps/mitienda360/05-caja.png",
+    "/apps/mitienda360/06-analisis.png"
+  ],
+  "features": [
+    "Ventas rápidas con búsqueda de productos y cálculo del cambio",
+    "Cobro en efectivo, tarjeta, transferencia o fiado",
+    "Fiado: cuenta por cliente, abonos y límite de crédito",
+    "Caja con arqueo por método de pago y faltante o sobrante al cerrar",
+    "Inventario con ajustes, motivos y alertas de stock mínimo",
+    "Compras, gastos y anulaciones con su efecto en la caja",
+    "Análisis del negocio y auditoría de quién hizo cada cosa",
+    "Respaldo, restauración, exportación a Excel/PDF/CSV e importación",
+    "Funciona sin internet; sincroniza cuando vuelve la conexión"
+  ],
+  "requirements": ["Android 8.0 o superior", "Windows 10 o superior"],
+  "repo": "AngelDevRD/mitienda360",
+  "packageId": "com.angeldevrd.appgestion",
+  "downloadName": "MiTienda360",
+  "docsUrl": "https://github.com/AngelDevRD/mitienda360#readme"
+}
