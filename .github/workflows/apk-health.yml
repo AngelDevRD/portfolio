@@ -1,0 +1,34 @@
+name: APK health
+
+# Alerta (el workflow falla) si el portafolio deja de servir la ultima APK de alguna app:
+# release sin publicar, repo privado sin GITHUB_TOKEN en Vercel, descarga rota, etc.
+on:
+  schedule:
+    - cron: "0 12 * * *"
+  workflow_dispatch:
+
+env:
+  SITE_URL: https://portfolio-five-zeta-xf21p0a5se.vercel.app
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verificar update y descarga de cada app movil
+        run: |
+          fail=0
+          for slug in anivault finanzas360 memory-cards mitienda360 nexfit number-merge snake-evolution stack-tower; do
+            json=$(curl -sS -m 60 "$SITE_URL/api/projects/$slug/update" || true)
+            version=$(echo "$json" | jq -r '.version // empty')
+            sha=$(echo "$json" | jq -r '.apk_sha256 // empty' | sed 's/^sha256://')
+            if [ -z "$version" ] || [ -z "$sha" ]; then
+              echo "::error::$slug sin release/APK servible: $json"; fail=1; continue
+            fi
+            got=$(curl -sS -m 300 -L "$SITE_URL/api/projects/$slug/download" | sha256sum | cut -d' ' -f1)
+            if [ "$got" != "$sha" ]; then
+              echo "::error::$slug $version: sha256 de la descarga no coincide"; fail=1
+            else
+              echo "ok $slug $version"
+            fi
+          done
+          exit $fail

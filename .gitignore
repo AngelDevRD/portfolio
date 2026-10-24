@@ -35,3 +35,19 @@ next-env.d.ts
 
 .vercel
 .env*
+# auto-git-sync
+.env.*
+!.env.example
+*.key
+*.keystore
+*.jks
+id_rsa*
+id_ed25519*
+node_modules/
+.dart_tool/
+build/
+dist/
+__pycache__/
+*.log
+Thumbs.db
+auto-sync.lock

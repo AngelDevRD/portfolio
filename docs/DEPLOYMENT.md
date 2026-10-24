@@ -20,7 +20,7 @@ para producción.
 | `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Cliente público de Supabase (contador de descargas, lectura) | No — el contador degrada a 0 si falta |
 | `SUPABASE_SERVICE_ROLE_KEY` | Cliente admin de Supabase (insertar sugerencias) — **solo servidor** | No — la tabla de sugerencias no se llena si falta |
 | `ADMIN_PASSWORD` | Contraseña única del panel `/admin` | Sí para usar el panel (500 si falta y se intenta login) |
-| `GITHUB_TOKEN` | Autenticación contra la API de GitHub (evita el rate-limit anónimo de 60 req/h; los 8 repos Flutter son públicos, gymflow y nexora-crm son privados) | Recomendada — sin ella, con poco tráfico ya se agota el límite anónimo y las apps dejan de mostrar versión y descarga |
+| `GITHUB_TOKEN` | Autenticación contra la API de GitHub (evita el rate-limit anónimo de 60 req/h; memory_cards, number_merge, snake_evolution y stack_tower son públicos; **anivault, finanzas360, mitienda360 y nexfit son PRIVADOS**, así que sin un token con permiso de lectura (Contents + Metadata, solo lectura) sobre esos 4 repos, `/update` responde 404 y el botón Descargar lleva a un 404 de GitHub; gymflow y nexora-crm también son privados. El workflow `.github/workflows/apk-health.yml` avisa a diario si alguna app deja de servirse) | Recomendada — sin ella, con poco tráfico ya se agota el límite anónimo y las apps dejan de mostrar versión y descarga |
 | `PROJECTS_REPOSITORY_DRIVER` | Selecciona la implementación de `ProjectRepository` (`src/lib/projects/factory.ts`) | No, default `"json"` |
 | `APK_STORAGE_DRIVER` | Selecciona la implementación de `ApkStorageProvider` (`src/lib/storage/factory.ts`) | No, default `"github"` |
 
